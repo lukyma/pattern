@@ -1,9 +1,7 @@
 ﻿using Castle.DynamicProxy;
-using FluentValidation.Results;
 using Moq;
 using pattern.strategy.test.Fakes;
 using patterns.strategy;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -16,7 +14,7 @@ namespace pattern.strategy.test.Tests.Validation
         [Fact]
         public void ValidateAsyncIsInvalidRequestTest()
         {
-            var validatorInterceptor = new ValidatorInterceptor(new List<ValidationFailure>());
+            var validatorInterceptor = new ValidatorInterceptor(new ValidationErrors());
 
             var invocationMock = new Mock<Castle.DynamicProxy.IInvocation>();
 
@@ -34,7 +32,7 @@ namespace pattern.strategy.test.Tests.Validation
         [Fact]
         public void ValidateAsyncIsValidRequestTest()
         {
-            var validatorInterceptor = new ValidatorInterceptor(new List<ValidationFailure>());
+            var validatorInterceptor = new ValidatorInterceptor(new ValidationErrors());
 
             var invocationMock = new Mock<Castle.DynamicProxy.IInvocation>();
 

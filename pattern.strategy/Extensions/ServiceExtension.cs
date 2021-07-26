@@ -1,8 +1,7 @@
 ﻿using Castle.DynamicProxy;
-using FluentValidation.Results;
 using Microsoft.Extensions.DependencyInjection;
+using pattern.strategy;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -43,10 +42,7 @@ namespace patterns.strategy
                 .CustomAttributes
                 .Any(o => o.AttributeType == typeof(ValidatorAttribute));
 
-            if (validationAttribute)
-            {
-                services.Add(ServiceDescriptor.Describe(typeof(IList<ValidationFailure>), typeof(List<ValidationFailure>), lifetime));
-            }
+            services.Add(ServiceDescriptor.Describe(typeof(IValidationErrors), typeof(ValidationErrors), lifetime));
 
             services.Add(ServiceDescriptor.Describe(typeInterface, (sp) =>
             {

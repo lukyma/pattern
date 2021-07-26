@@ -38,7 +38,7 @@ namespace pattern.strategy.test.Tests.StrategyContext
             var proxyGenerator = new ProxyGenerator();
             var proxy = proxyGenerator.CreateInterfaceProxyWithTarget(typeof(IStrategy<Request, Response>),
                                                                       strategyFake,
-                                                                      new ValidatorInterceptor(new List<ValidationFailure>()));
+                                                                      new ValidatorInterceptor(new ValidationErrors()));
 
             serviceProviderMock.Setup(o => o.GetService(typeof(IStrategy<Request, Response>)))
                 .Returns(proxy);

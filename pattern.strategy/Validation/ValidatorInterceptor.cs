@@ -1,8 +1,7 @@
 ﻿using Castle.DynamicProxy;
 using FluentValidation;
-using FluentValidation.Results;
+using pattern.strategy;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,8 +9,8 @@ namespace patterns.strategy
 {
     public class ValidatorInterceptor : AsyncInterceptorBase, IAsyncValidatorInterceptor
     {
-        public IList<ValidationFailure> ValidationFailures { get; }
-        public ValidatorInterceptor(IList<ValidationFailure> validationFailures = null)
+        public IValidationErrors ValidationFailures { get; }
+        public ValidatorInterceptor(IValidationErrors validationFailures = null)
         {
             ValidationFailures = validationFailures;
         }
