@@ -2,7 +2,7 @@
 
 namespace patterns.strategy
 {
-    public interface IAsyncValidatorInterceptor : IAsyncInterceptor
+    internal interface IAsyncValidatorInterceptor : IAsyncInterceptor
     {
     }
 }

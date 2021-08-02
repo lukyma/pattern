@@ -10,7 +10,7 @@ namespace patterns.strategy
     [ExcludeFromCodeCoverage]
     public static class ServiceExtensions
     {
-        public static ServiceCollection AddScoppedStrategy<TInterface, TImplementation>(this IServiceCollection services)
+        public static IServiceCollection AddScoppedStrategy<TInterface, TImplementation>(this IServiceCollection services)
             where TInterface : IStrategy
             where TImplementation : class, IStrategy
 
@@ -29,7 +29,7 @@ namespace patterns.strategy
         //{
         //    return AddStrategy<TInterface, TImplementation>(services, ServiceLifetime.Singleton);
         //}
-        public static ServiceCollection AddStrategy<TInterface, TImplementation>(this IServiceCollection services, ServiceLifetime lifetime)
+        public static IServiceCollection AddStrategy<TInterface, TImplementation>(this IServiceCollection services, ServiceLifetime lifetime)
             where TInterface : IStrategy
             where TImplementation : class, IStrategy
         {
@@ -41,6 +41,18 @@ namespace patterns.strategy
             bool validationAttribute = methodInfoHandle
                 .CustomAttributes
                 .Any(o => o.AttributeType == typeof(ValidatorAttribute));
+
+            services.AddSingleton<IProxyGenerator, ProxyGenerator>();
+
+            services.Add(ServiceDescriptor.Describe(typeof(IAsyncValidatorInterceptor), (sp) =>
+            {
+                return ActivatorUtilities.GetServiceOrCreateInstance(sp, typeof(ValidatorInterceptor));
+            }, lifetime));
+
+            services.Add(ServiceDescriptor.Describe(typeof(IValidationErrors), (sp) =>
+            {
+                return ActivatorUtilities.GetServiceOrCreateInstance(sp, typeof(ValidationErrors));
+            }, lifetime));
 
             services.Add(ServiceDescriptor.Describe(typeInterface, (sp) =>
             {
@@ -73,7 +85,7 @@ namespace patterns.strategy
             }
             services.Add(ServiceDescriptor.Describe(serviceTypeStrategyContext, implementationTypeStrategyContext, lifetime));
 
-            return (ServiceCollection)services;
+            return services;
         }
     }
 }

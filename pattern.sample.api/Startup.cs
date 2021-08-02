@@ -26,10 +26,6 @@ namespace pattern.sample.api
 
             services.AddSingleton<IProxyGenerator, ProxyGenerator>();
 
-            services.AddScoped<IAsyncValidatorInterceptor, ValidatorInterceptor>();
-
-            services.AddScoped<IValidationErrors, ValidationErrors>();
-
             services.AddScoppedStrategy<IStrategy<TestStrategyRequest, TestStrategyResponse>, TestStrategy>();
         }
 
