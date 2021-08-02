@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <PackageId>Pattern</PackageId>
-    <Version>0.2.5</Version>
+    <Version>0.2.9</Version>
     <Authors>Lucas Machado</Authors>
     <Company>LM</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>

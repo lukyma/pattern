@@ -42,18 +42,6 @@ namespace patterns.strategy
                 .CustomAttributes
                 .Any(o => o.AttributeType == typeof(ValidatorAttribute));
 
-            services.AddSingleton<IProxyGenerator, ProxyGenerator>();
-
-            services.Add(ServiceDescriptor.Describe(typeof(IAsyncValidatorInterceptor), (sp) =>
-            {
-                return ActivatorUtilities.GetServiceOrCreateInstance(sp, typeof(ValidatorInterceptor));
-            }, lifetime));
-
-            services.Add(ServiceDescriptor.Describe(typeof(IValidationErrors), (sp) =>
-            {
-                return ActivatorUtilities.GetServiceOrCreateInstance(sp, typeof(ValidationErrors));
-            }, lifetime));
-
             services.Add(ServiceDescriptor.Describe(typeInterface, (sp) =>
             {
                 var instancia = ActivatorUtilities.GetServiceOrCreateInstance(sp, typeof(TImplementation));
