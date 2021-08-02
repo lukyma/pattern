@@ -17,18 +17,18 @@ namespace patterns.strategy
         {
             return AddStrategy<TInterface, TImplementation>(services, ServiceLifetime.Scoped);
         }
-        public static ServiceCollection AddTransientStrategy<TInterface, TImplementation>(this IServiceCollection services)
-            where TInterface : IStrategy
-            where TImplementation : class, IStrategy
-        {
-            return AddStrategy<TInterface, TImplementation>(services, ServiceLifetime.Transient);
-        }
-        public static ServiceCollection AddSingletonStrategy<TInterface, TImplementation>(this IServiceCollection services)
-            where TInterface : IStrategy
-            where TImplementation : class, IStrategy
-        {
-            return AddStrategy<TInterface, TImplementation>(services, ServiceLifetime.Singleton);
-        }
+        //public static ServiceCollection AddTransientStrategy<TInterface, TImplementation>(this IServiceCollection services)
+        //    where TInterface : IStrategy
+        //    where TImplementation : class, IStrategy
+        //{
+        //    return AddStrategy<TInterface, TImplementation>(services, ServiceLifetime.Transient);
+        //}
+        //public static ServiceCollection AddSingletonStrategy<TInterface, TImplementation>(this IServiceCollection services)
+        //    where TInterface : IStrategy
+        //    where TImplementation : class, IStrategy
+        //{
+        //    return AddStrategy<TInterface, TImplementation>(services, ServiceLifetime.Singleton);
+        //}
         public static ServiceCollection AddStrategy<TInterface, TImplementation>(this IServiceCollection services, ServiceLifetime lifetime)
             where TInterface : IStrategy
             where TImplementation : class, IStrategy
@@ -41,8 +41,6 @@ namespace patterns.strategy
             bool validationAttribute = methodInfoHandle
                 .CustomAttributes
                 .Any(o => o.AttributeType == typeof(ValidatorAttribute));
-
-            services.Add(ServiceDescriptor.Describe(typeof(IValidationErrors), typeof(ValidationErrors), lifetime));
 
             services.Add(ServiceDescriptor.Describe(typeInterface, (sp) =>
             {

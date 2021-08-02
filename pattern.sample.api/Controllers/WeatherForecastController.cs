@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using pattern.sample.api.StrategyHandler;
+using pattern.strategy;
 using patterns.strategy;
 using System;
 using System.Collections.Generic;
@@ -14,13 +15,15 @@ namespace pattern.sample.api.Controllers
     public class WeatherForecastController : ControllerBase
     {
         private IStrategyContext StrategyContext { get; }
+        private IValidationErrors _validationFailures { get; }
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        public WeatherForecastController(IStrategyContext strategyContext)
+        public WeatherForecastController(IStrategyContext strategyContext, IValidationErrors validationErrors)
         {
+            _validationFailures = validationErrors;
             StrategyContext = strategyContext;
         }
 
