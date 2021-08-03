@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <PackageId>Pattern</PackageId>
-    <Version>0.2.9</Version>
+    <Version>0.2.9.1</Version>
     <Authors>Lucas Machado</Authors>
     <Company>LM</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
