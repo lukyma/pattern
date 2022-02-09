@@ -10,8 +10,16 @@ namespace pattern.strategy
     [AttributeUsage(AttributeTargets.Method, Inherited = true)]
     public abstract class AsyncInterceptorBaseAttribute : Attribute, IAsyncInterceptor
     {
+        public AsyncInterceptorBaseAttribute()
+        {
+        }
         public int Order { get; set; }
         internal string TypeClass { get; set; }
+        internal IServiceProvider ServiceProvider { get; set; }
+        protected T GetService<T>()
+        {
+            return (T)ServiceProvider.GetService(typeof(T));
+        }
         private static readonly MethodInfo InterceptSynchronousMethodInfo =
             typeof(AsyncInterceptorBase).GetMethod(
                 nameof(InterceptSynchronousResult), BindingFlags.Static | BindingFlags.NonPublic)!;

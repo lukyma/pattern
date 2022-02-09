@@ -1,5 +1,7 @@
 ﻿using pattern.sample.api.Interceptor;
+using pattern.sample.api.StrategyHandler.Validator;
 using patterns.strategy;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,7 +9,7 @@ namespace pattern.sample.api.StrategyHandler
 {
     public class TestStrategy : IStrategy<TestStrategyRequest, TestStrategyResponse>
     {
-        [TestInterceptor(Order = 1)]
+        [ValidatorInterceptor(typeof(TestStrategyRequestValidator), Order = 1)]
         public async Task<TestStrategyResponse> HandleAsync(TestStrategyRequest request, CancellationToken cancellationToken)
         {
             //var teste = this.GetType().GetProperty("Teste", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);

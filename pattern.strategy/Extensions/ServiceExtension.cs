@@ -64,6 +64,7 @@ namespace patterns.strategy
                         {
                             typeClass.SetValue(item, nameClass);
                         }
+                        item.GetType().GetProperty("ServiceProvider", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(item, sp);
                         return item;
                     }, lifetime));
                 }

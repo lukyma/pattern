@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using pattern.sample.api.StrategyHandler;
+using pattern.sample.api.StrategyHandler.Validator;
 using pattern.strategy;
 using patterns.strategy;
 
@@ -24,7 +25,7 @@ namespace pattern.sample.api
         {
             services.AddControllers();
 
-            //services.AddSingleton<IProxyGenerator, ProxyGenerator>();
+            services.AddSingleton<IValidationErrors, ValidationErrors>();
 
             services.AddScoppedStrategy<IStrategy<TestStrategyRequest, TestStrategyResponse>, TestStrategy>();
             services.AddScoppedStrategy<IStrategy<TestStrategyRequest2, TestStrategyResponse2>, TestStrategy2>();

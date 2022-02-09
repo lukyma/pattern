@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\pattern.sample.api\pattern.sample.api.csproj" />
     <ProjectReference Include="..\pattern.strategy\pattern.strategy.csproj" />
   </ItemGroup>
 
