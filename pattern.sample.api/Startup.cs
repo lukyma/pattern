@@ -26,8 +26,6 @@ namespace pattern.sample.api
 
             //services.AddSingleton<IProxyGenerator, ProxyGenerator>();
 
-            services.AddScoped<IValidationErrors, ValidationErrors>();
-
             services.AddScoppedStrategy<IStrategy<TestStrategyRequest, TestStrategyResponse>, TestStrategy>();
             services.AddScoppedStrategy<IStrategy<TestStrategyRequest2, TestStrategyResponse2>, TestStrategy2>();
         }
