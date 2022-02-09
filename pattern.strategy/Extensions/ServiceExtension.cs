@@ -2,8 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using pattern.strategy;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 
 namespace patterns.strategy
 {
@@ -37,22 +39,54 @@ namespace patterns.strategy
             var serviceTypeStrategyContext = typeof(IStrategyContext);
             var implementationTypeStrategyContext = typeof(StrategyContext);
 
-            var methodInfoHandle = typeof(TImplementation).GetMethod("HandleAsync");
-            bool validationAttribute = methodInfoHandle
-                .CustomAttributes
-                .Any(o => o.AttributeType == typeof(ValidatorAttribute));
+            var methodsInterceptors = typeof(TImplementation)
+                .GetMethods()
+                .Where(o => o.CustomAttributes.Any(p => p.AttributeType.IsSubclassOf(typeof(AsyncInterceptorBaseAttribute))))
+                .SelectMany(o => o.GetCustomAttributes(false).Where(p => p.GetType().IsSubclassOf(typeof(AsyncInterceptorBaseAttribute))).Select(o => o))
+                .Select(o => o);
+
+            if (!services.Any(o => o.ServiceType == typeof(IProxyGenerator)))
+            {
+                services.Add(ServiceDescriptor.Describe(typeof(IProxyGenerator), typeof(ProxyGenerator), ServiceLifetime.Singleton));
+            }
+
+            IList<object> attributesInterceptor = new List<object>();
+
+            if (methodsInterceptors.Any())
+            {
+                foreach (var item in methodsInterceptors)
+                {
+                    services.Add(ServiceDescriptor.Describe(typeof(IAsyncInterceptor), (sp) =>
+                    {
+                        var typeClass = item.GetType().GetProperty("TypeClass", BindingFlags.NonPublic | BindingFlags.Instance);
+                        var nameClass = typeof(TImplementation).Name;
+                        if (string.IsNullOrEmpty((string)typeClass.GetValue(item)))
+                        {
+                            typeClass.SetValue(item, nameClass);
+                        }
+                        return item;
+                    }, lifetime));
+                }
+            }
+
 
             services.Add(ServiceDescriptor.Describe(typeInterface, (sp) =>
             {
                 var instancia = ActivatorUtilities.GetServiceOrCreateInstance(sp, typeof(TImplementation));
 
-                if (!validationAttribute)
+                if (!methodsInterceptors.Any())
                 {
                     return instancia;
                 }
 
-                var proxyGenerator = sp.GetRequiredService<IProxyGenerator>();
-                var interceptors = sp.GetServices<IAsyncValidatorInterceptor>().ToArray();
+                var proxyGenerator = sp.GetService<IProxyGenerator>();
+                var interceptors = sp.GetServices<IAsyncInterceptor>()
+                .Where(o => ((AsyncInterceptorBaseAttribute)o)
+                           .GetType()
+                           .GetProperty("TypeClass", BindingFlags.NonPublic | BindingFlags.Instance)
+                           .GetValue(o) as string == instancia.GetType().Name)
+                .OrderBy(o => ((AsyncInterceptorBaseAttribute)o).Order)
+                .ToArray();
                 var proxy = proxyGenerator.CreateInterfaceProxyWithTarget(typeof(TInterface), instancia, interceptors);
 
                 if (instancia is IDisposable disposable)

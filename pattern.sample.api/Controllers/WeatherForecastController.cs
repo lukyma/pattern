@@ -15,15 +15,13 @@ namespace pattern.sample.api.Controllers
     public class WeatherForecastController : ControllerBase
     {
         private IStrategyContext StrategyContext { get; }
-        private IValidationErrors _validationFailures { get; }
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        public WeatherForecastController(IStrategyContext strategyContext, IValidationErrors validationErrors)
+        public WeatherForecastController(IStrategyContext strategyContext)
         {
-            _validationFailures = validationErrors;
             StrategyContext = strategyContext;
         }
 

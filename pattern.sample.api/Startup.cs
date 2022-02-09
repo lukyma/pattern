@@ -24,9 +24,12 @@ namespace pattern.sample.api
         {
             services.AddControllers();
 
-            services.AddSingleton<IProxyGenerator, ProxyGenerator>();
+            //services.AddSingleton<IProxyGenerator, ProxyGenerator>();
+
+            services.AddScoped<IValidationErrors, ValidationErrors>();
 
             services.AddScoppedStrategy<IStrategy<TestStrategyRequest, TestStrategyResponse>, TestStrategy>();
+            services.AddScoppedStrategy<IStrategy<TestStrategyRequest2, TestStrategyResponse2>, TestStrategy2>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
