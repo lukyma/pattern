@@ -12,6 +12,13 @@ namespace patterns.strategy
     [ExcludeFromCodeCoverage]
     public static class ServiceExtensions
     {
+        /// <summary>
+        /// Add scoped strategy
+        /// </summary>
+        /// <typeparam name="TInterface">Interface the type IStrategy<,> </typeparam>
+        /// <typeparam name="TImplementation">Implementation of IStrategy<,> </typeparam>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public static IServiceCollection AddScoppedStrategy<TInterface, TImplementation>(this IServiceCollection services)
             where TInterface : IStrategy
             where TImplementation : class, IStrategy
@@ -19,11 +26,27 @@ namespace patterns.strategy
         {
             return AddStrategy<TInterface, TImplementation>(services, ServiceLifetime.Scoped);
         }
+        /// <summary>
+        /// Add Service with proxy interceptor and with ServiceLifeTime Scoped
+        /// </summary>
+        /// <typeparam name="TInterface">Interface service type</typeparam>
+        /// <typeparam name="TImplementation">Implementation service type</typeparam>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public static IServiceCollection AddScopedProxyInterceptor<TInterface, TImplementation>(this IServiceCollection services)
             where TImplementation : class
         {
             return AddProxyInterceptor<TInterface, TImplementation>(services, ServiceLifetime.Scoped);
         }
+
+        /// <summary>
+        /// Add Service with proxy interceptor and ServiceLifetime
+        /// </summary>
+        /// <typeparam name="TInterface">Interface service type</typeparam>
+        /// <typeparam name="TImplementation">Implementation service type</typeparam>
+        /// <param name="services"></param>
+        /// <param name="lifetime"></param>
+        /// <returns></returns>
         public static IServiceCollection AddProxyInterceptor<TInterface, TImplementation>(this IServiceCollection services, ServiceLifetime lifetime)
             where TImplementation : class
 

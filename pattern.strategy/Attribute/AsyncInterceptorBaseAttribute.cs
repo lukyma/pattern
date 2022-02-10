@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace pattern.strategy
 {
+    /// <summary>
+    /// Attribute to be used in your interceptors.
+    /// </summary>
     public abstract class InterceptorAttribute : AsyncInterceptorBaseAttribute, IAsyncInterceptor
     {
         protected override abstract Task InterceptAsync(
@@ -21,6 +24,10 @@ namespace pattern.strategy
             Func<IInvocation, IInvocationProceedInfo, Task<TResult>> proceed);
     }
 
+    /// <summary>
+    /// Base attribute responsible for implementing the functions of the DynamicProxy interceptor. 
+    /// Note: must not be used as an interceptor attribute. Please use InterceptorAttribute. 
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method, Inherited = true)]
     public class AsyncInterceptorBaseAttribute : Attribute, IAsyncInterceptor
     {
@@ -31,6 +38,11 @@ namespace pattern.strategy
         internal AsyncInterceptorBaseAttribute Interceptor { get; set; }
         internal string TypeClass { get; set; }
         internal IServiceProvider ServiceProvider { get; set; }
+        /// <summary>
+        /// Returns the instance that is registered in the ServiceProvider.
+        /// </summary>
+        /// <typeparam name="T">Service register type</typeparam>
+        /// <returns></returns>
         protected T GetService<T>()
         {
             return (T)ServiceProvider.GetService(typeof(T));
