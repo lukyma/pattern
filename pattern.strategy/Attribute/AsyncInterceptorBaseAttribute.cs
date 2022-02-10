@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 namespace pattern.strategy
 {
     [AttributeUsage(AttributeTargets.Method, Inherited = true)]
-    public abstract class AsyncInterceptorBaseAttribute : Attribute, IAsyncInterceptor
+    public class AsyncInterceptorBaseAttribute : Attribute, IAsyncInterceptor
     {
         public AsyncInterceptorBaseAttribute()
         {
         }
         public int Order { get; set; }
+        internal AsyncInterceptorBaseAttribute Interceptor { get; set; }
         internal string TypeClass { get; set; }
         internal IServiceProvider ServiceProvider { get; set; }
         protected T GetService<T>()
@@ -38,7 +39,6 @@ namespace pattern.strategy
         /// <param name="invocation">The method invocation.</param>
         public void InterceptSynchronous(IInvocation invocation)
         {
-            
             Type returnType = invocation.Method.ReturnType;
             GenericSynchronousHandler handler = GenericSynchronousHandlers.GetOrAdd(returnType, CreateHandler);
             handler(this, invocation);
@@ -71,10 +71,13 @@ namespace pattern.strategy
         /// <param name="proceedInfo">The <see cref="IInvocationProceedInfo"/>.</param>
         /// <param name="proceed">The function to proceed the <paramref name="proceedInfo"/>.</param>
         /// <returns>A <see cref="Task" /> object that represents the asynchronous operation.</returns>
-        protected abstract Task InterceptAsync(
+        protected virtual Task InterceptAsync(
             IInvocation invocation,
             IInvocationProceedInfo proceedInfo,
-            Func<IInvocation, IInvocationProceedInfo, Task> proceed);
+            Func<IInvocation, IInvocationProceedInfo, Task> proceed)
+        {
+            return Interceptor.InterceptAsync(invocation, proceedInfo, proceed);
+        }
 
         /// <summary>
         /// Override in derived classes to intercept method invocations.
@@ -84,10 +87,13 @@ namespace pattern.strategy
         /// <param name="proceedInfo">The <see cref="IInvocationProceedInfo"/>.</param>
         /// <param name="proceed">The function to proceed the <paramref name="proceedInfo"/>.</param>
         /// <returns>A <see cref="Task" /> object that represents the asynchronous operation.</returns>
-        protected abstract Task<TResult> InterceptAsync<TResult>(
+        protected virtual Task<TResult> InterceptAsync<TResult>(
             IInvocation invocation,
             IInvocationProceedInfo proceedInfo,
-            Func<IInvocation, IInvocationProceedInfo, Task<TResult>> proceed);
+            Func<IInvocation, IInvocationProceedInfo, Task<TResult>> proceed)
+        {
+            return Interceptor.InterceptAsync(invocation, proceedInfo, proceed);
+        }
 
         private static GenericSynchronousHandler CreateHandler(Type returnType)
         {

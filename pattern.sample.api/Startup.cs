@@ -1,4 +1,3 @@
-using Castle.DynamicProxy;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -6,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using pattern.sample.api.StrategyHandler;
 using pattern.sample.api.StrategyHandler.Validator;
-using pattern.strategy;
 using patterns.strategy;
 
 namespace pattern.sample.api

@@ -43,7 +43,7 @@ namespace patterns.strategy
                 .GetMethods()
                 .Where(o => o.CustomAttributes.Any(p => p.AttributeType.IsSubclassOf(typeof(AsyncInterceptorBaseAttribute))))
                 .SelectMany(o => o.GetCustomAttributes(false).Where(p => p.GetType().IsSubclassOf(typeof(AsyncInterceptorBaseAttribute))).Select(o => o))
-                .Select(o => o);
+                .Select(o => (AsyncInterceptorBaseAttribute)o);
 
             if (!services.Any(o => o.ServiceType == typeof(IProxyGenerator)))
             {
@@ -58,14 +58,18 @@ namespace patterns.strategy
                 {
                     services.Add(ServiceDescriptor.Describe(typeof(IAsyncInterceptor), (sp) =>
                     {
-                        var typeClass = item.GetType().GetProperty("TypeClass", BindingFlags.NonPublic | BindingFlags.Instance);
-                        var nameClass = typeof(TImplementation).Name;
+                        PropertyInfo typeClass = item.GetType().GetProperty("TypeClass", BindingFlags.NonPublic | BindingFlags.Instance);
+                        string nameClass = typeof(TImplementation).Name;
                         if (string.IsNullOrEmpty((string)typeClass.GetValue(item)))
                         {
                             typeClass.SetValue(item, nameClass);
                         }
                         item.GetType().GetProperty("ServiceProvider", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(item, sp);
-                        return item;
+                        AsyncInterceptorBaseAttribute interceptor = Activator.CreateInstance<AsyncInterceptorBaseAttribute>();
+                        interceptor.Order = item.Order;
+                        interceptor.TypeClass = nameClass;
+                        interceptor.Interceptor = item;
+                        return interceptor;
                     }, lifetime));
                 }
             }
@@ -73,22 +77,22 @@ namespace patterns.strategy
 
             services.Add(ServiceDescriptor.Describe(typeInterface, (sp) =>
             {
-                var instancia = ActivatorUtilities.GetServiceOrCreateInstance(sp, typeof(TImplementation));
+                object instancia = ActivatorUtilities.GetServiceOrCreateInstance(sp, typeof(TImplementation));
 
                 if (!methodsInterceptors.Any())
                 {
                     return instancia;
                 }
 
-                var proxyGenerator = sp.GetService<IProxyGenerator>();
-                var interceptors = sp.GetServices<IAsyncInterceptor>()
+                IProxyGenerator proxyGenerator = sp.GetService<IProxyGenerator>();
+                IAsyncInterceptor[] interceptors = sp.GetServices<IAsyncInterceptor>()
                 .Where(o => ((AsyncInterceptorBaseAttribute)o)
                            .GetType()
                            .GetProperty("TypeClass", BindingFlags.NonPublic | BindingFlags.Instance)
                            .GetValue(o) as string == instancia.GetType().Name)
                 .OrderBy(o => ((AsyncInterceptorBaseAttribute)o).Order)
                 .ToArray();
-                var proxy = proxyGenerator.CreateInterfaceProxyWithTarget(typeof(TInterface), instancia, interceptors);
+                object proxy = proxyGenerator.CreateInterfaceProxyWithTarget(typeof(TInterface), instancia, interceptors);
 
                 if (instancia is IDisposable disposable)
                 {

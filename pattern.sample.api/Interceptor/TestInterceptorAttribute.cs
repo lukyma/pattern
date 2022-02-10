@@ -1,12 +1,9 @@
 ﻿using Castle.DynamicProxy;
 using FluentValidation;
-using pattern.sample.api.StrategyHandler;
 using pattern.sample.api.StrategyHandler.Validator;
 using pattern.strategy;
-using patterns.strategy;
 using System;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace pattern.sample.api.Interceptor

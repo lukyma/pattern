@@ -1,13 +1,10 @@
 ﻿using Castle.DynamicProxy;
-using FluentValidation.Results;
 using Moq;
 using pattern.sample.api.Interceptor;
 using pattern.sample.api.StrategyHandler.Validator;
 using pattern.strategy.test.Fakes;
-using pattern.strategy.test.Fakes.Interceptor;
 using patterns.strategy;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;

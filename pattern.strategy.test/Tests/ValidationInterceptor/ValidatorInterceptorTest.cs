@@ -2,8 +2,6 @@
 using Moq;
 using pattern.strategy.test.Fakes;
 using pattern.strategy.test.Fakes.Interceptor;
-using patterns.strategy;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using static pattern.strategy.test.Fakes.RequestFake;

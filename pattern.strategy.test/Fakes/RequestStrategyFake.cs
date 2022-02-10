@@ -1,5 +1,4 @@
 ﻿using pattern.sample.api.Interceptor;
-using pattern.strategy.test.Fakes.Interceptor;
 using patterns.strategy;
 using System.Threading;
 using System.Threading.Tasks;

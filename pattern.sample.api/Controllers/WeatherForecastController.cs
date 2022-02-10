@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using pattern.sample.api.StrategyHandler;
-using pattern.strategy;
 using patterns.strategy;
 using System;
 using System.Collections.Generic;
