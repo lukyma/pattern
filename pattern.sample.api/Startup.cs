@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using pattern.sample.api.Service;
 using pattern.sample.api.StrategyHandler;
 using pattern.sample.api.StrategyHandler.Validator;
 using patterns.strategy;
@@ -25,6 +26,7 @@ namespace pattern.sample.api
 
             services.AddSingleton<IValidationErrors, ValidationErrors>();
 
+            services.AddScopedProxyInterceptor<ITestService, TestService>();
             services.AddScoppedStrategy<IStrategy<TestStrategyRequest, TestStrategyResponse>, TestStrategy>();
             services.AddScoppedStrategy<IStrategy<TestStrategyRequest2, TestStrategyResponse2>, TestStrategy2>();
         }

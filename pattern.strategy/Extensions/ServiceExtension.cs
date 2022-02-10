@@ -19,6 +19,81 @@ namespace patterns.strategy
         {
             return AddStrategy<TInterface, TImplementation>(services, ServiceLifetime.Scoped);
         }
+        public static IServiceCollection AddScopedProxyInterceptor<TInterface, TImplementation>(this IServiceCollection services)
+            where TImplementation : class
+        {
+            return AddProxyInterceptor<TInterface, TImplementation>(services, ServiceLifetime.Scoped);
+        }
+        public static IServiceCollection AddProxyInterceptor<TInterface, TImplementation>(this IServiceCollection services, ServiceLifetime lifetime)
+            where TImplementation : class
+
+        {
+            var typeInterface = typeof(TInterface);
+
+            var methodsInterceptors = typeof(TImplementation)
+                .GetMethods()
+                .Where(o => o.CustomAttributes.Any(p => p.AttributeType.IsSubclassOf(typeof(AsyncInterceptorBaseAttribute))))
+                .SelectMany(o => o.GetCustomAttributes(false).Where(p => p.GetType().IsSubclassOf(typeof(AsyncInterceptorBaseAttribute))).Select(o => o))
+                .Select(o => (AsyncInterceptorBaseAttribute)o);
+
+            if (!services.Any(o => o.ServiceType == typeof(IProxyGenerator)))
+            {
+                services.Add(ServiceDescriptor.Describe(typeof(IProxyGenerator), typeof(ProxyGenerator), ServiceLifetime.Singleton));
+            }
+
+            IList<object> attributesInterceptor = new List<object>();
+
+            if (methodsInterceptors.Any())
+            {
+                foreach (var item in methodsInterceptors)
+                {
+                    services.Add(ServiceDescriptor.Describe(typeof(IAsyncInterceptor), (sp) =>
+                    {
+                        PropertyInfo typeClass = item.GetType().GetProperty("TypeClass", BindingFlags.NonPublic | BindingFlags.Instance);
+                        string nameClass = typeof(TImplementation).Name;
+                        if (string.IsNullOrEmpty((string)typeClass.GetValue(item)))
+                        {
+                            typeClass.SetValue(item, nameClass);
+                        }
+                        item.GetType().GetProperty("ServiceProvider", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(item, sp);
+                        AsyncInterceptorBaseAttribute interceptor = Activator.CreateInstance<AsyncInterceptorBaseAttribute>();
+                        interceptor.Order = item.Order;
+                        interceptor.TypeClass = nameClass;
+                        interceptor.Interceptor = item;
+                        return interceptor;
+                    }, lifetime));
+                }
+            }
+
+
+            services.Add(ServiceDescriptor.Describe(typeInterface, (sp) =>
+            {
+                object instancia = ActivatorUtilities.GetServiceOrCreateInstance(sp, typeof(TImplementation));
+
+                if (!methodsInterceptors.Any())
+                {
+                    return instancia;
+                }
+
+                IProxyGenerator proxyGenerator = sp.GetService<IProxyGenerator>();
+                IAsyncInterceptor[] interceptors = sp.GetServices<IAsyncInterceptor>()
+                .Where(o => ((AsyncInterceptorBaseAttribute)o)
+                           .GetType()
+                           .GetProperty("TypeClass", BindingFlags.NonPublic | BindingFlags.Instance)
+                           .GetValue(o) as string == instancia.GetType().Name)
+                .OrderBy(o => ((AsyncInterceptorBaseAttribute)o).Order)
+                .ToArray();
+                object proxy = proxyGenerator.CreateInterfaceProxyWithTarget(typeof(TInterface), instancia, interceptors);
+
+                if (instancia is IDisposable disposable)
+                {
+                    disposable.Dispose();
+                }
+                return proxy;
+            }, lifetime));
+
+            return services;
+        }
         //public static ServiceCollection AddTransientStrategy<TInterface, TImplementation>(this IServiceCollection services)
         //    where TInterface : IStrategy
         //    where TImplementation : class, IStrategy

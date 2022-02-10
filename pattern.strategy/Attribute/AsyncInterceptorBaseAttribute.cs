@@ -2,6 +2,7 @@
 using patterns.strategy;
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -76,7 +77,13 @@ namespace pattern.strategy
             IInvocationProceedInfo proceedInfo,
             Func<IInvocation, IInvocationProceedInfo, Task> proceed)
         {
-            return Interceptor.InterceptAsync(invocation, proceedInfo, proceed);
+            if (invocation.MethodInvocationTarget
+                .GetCustomAttributes(false)
+                .Any(p => p.GetType().IsSubclassOf(typeof(AsyncInterceptorBaseAttribute))))
+            {
+                return Interceptor.InterceptAsync(invocation, proceedInfo, proceed);
+            }
+            return proceed(invocation, proceedInfo);
         }
 
         /// <summary>
@@ -92,7 +99,13 @@ namespace pattern.strategy
             IInvocationProceedInfo proceedInfo,
             Func<IInvocation, IInvocationProceedInfo, Task<TResult>> proceed)
         {
-            return Interceptor.InterceptAsync(invocation, proceedInfo, proceed);
+            if (invocation.MethodInvocationTarget
+                .GetCustomAttributes(false)
+                .Any(p => p.GetType().IsSubclassOf(typeof(AsyncInterceptorBaseAttribute))))
+            {
+                return Interceptor.InterceptAsync(invocation, proceedInfo, proceed);
+            }
+            return proceed(invocation, proceedInfo);
         }
 
         private static GenericSynchronousHandler CreateHandler(Type returnType)
