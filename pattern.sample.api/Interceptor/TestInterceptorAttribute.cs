@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace pattern.sample.api.Interceptor
 {
-    public class TestInterceptorAttribute : AsyncInterceptorBaseAttribute, IAsyncInterceptor
+    public class TestInterceptorAttribute : InterceptorAttribute, IAsyncInterceptor
     {
         public TestInterceptorAttribute()
         {
@@ -24,7 +24,7 @@ namespace pattern.sample.api.Interceptor
         }
     }
 
-    public class ValidatorInterceptorAttribute : AsyncInterceptorBaseAttribute, IAsyncInterceptor
+    public class ValidatorInterceptorAttribute : InterceptorAttribute, IAsyncInterceptor
     {
         private Type ValidationType { get; }
         public ValidatorInterceptorAttribute(Type validationType)

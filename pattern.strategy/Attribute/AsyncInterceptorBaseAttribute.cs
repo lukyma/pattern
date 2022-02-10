@@ -8,6 +8,19 @@ using System.Threading.Tasks;
 
 namespace pattern.strategy
 {
+    public abstract class InterceptorAttribute : AsyncInterceptorBaseAttribute, IAsyncInterceptor
+    {
+        protected override abstract Task InterceptAsync(
+            IInvocation invocation,
+            IInvocationProceedInfo proceedInfo,
+            Func<IInvocation, IInvocationProceedInfo, Task> proceed);
+
+        protected override abstract Task<TResult> InterceptAsync<TResult>(
+            IInvocation invocation,
+            IInvocationProceedInfo proceedInfo,
+            Func<IInvocation, IInvocationProceedInfo, Task<TResult>> proceed);
+    }
+
     [AttributeUsage(AttributeTargets.Method, Inherited = true)]
     public class AsyncInterceptorBaseAttribute : Attribute, IAsyncInterceptor
     {

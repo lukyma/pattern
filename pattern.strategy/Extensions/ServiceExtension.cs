@@ -32,9 +32,9 @@ namespace patterns.strategy
 
             var methodsInterceptors = typeof(TImplementation)
                 .GetMethods()
-                .Where(o => o.CustomAttributes.Any(p => p.AttributeType.IsSubclassOf(typeof(AsyncInterceptorBaseAttribute))))
-                .SelectMany(o => o.GetCustomAttributes(false).Where(p => p.GetType().IsSubclassOf(typeof(AsyncInterceptorBaseAttribute))).Select(o => o))
-                .Select(o => (AsyncInterceptorBaseAttribute)o);
+                .Where(o => o.CustomAttributes.Any(p => p.AttributeType.IsSubclassOf(typeof(InterceptorAttribute))))
+                .SelectMany(o => o.GetCustomAttributes(false).Where(p => p.GetType().IsSubclassOf(typeof(InterceptorAttribute))).Select(o => o))
+                .Select(o => (InterceptorAttribute)o);
 
             if (!services.Any(o => o.ServiceType == typeof(IProxyGenerator)))
             {
@@ -116,9 +116,9 @@ namespace patterns.strategy
 
             var methodsInterceptors = typeof(TImplementation)
                 .GetMethods()
-                .Where(o => o.CustomAttributes.Any(p => p.AttributeType.IsSubclassOf(typeof(AsyncInterceptorBaseAttribute))))
-                .SelectMany(o => o.GetCustomAttributes(false).Where(p => p.GetType().IsSubclassOf(typeof(AsyncInterceptorBaseAttribute))).Select(o => o))
-                .Select(o => (AsyncInterceptorBaseAttribute)o);
+                .Where(o => o.CustomAttributes.Any(p => p.AttributeType.IsSubclassOf(typeof(InterceptorAttribute))))
+                .SelectMany(o => o.GetCustomAttributes(false).Where(p => p.GetType().IsSubclassOf(typeof(InterceptorAttribute))).Select(o => o))
+                .Select(o => (InterceptorAttribute)o);
 
             if (!services.Any(o => o.ServiceType == typeof(IProxyGenerator)))
             {
