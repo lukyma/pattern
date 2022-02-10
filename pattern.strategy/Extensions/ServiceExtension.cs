@@ -72,16 +72,10 @@ namespace patterns.strategy
                 {
                     services.Add(ServiceDescriptor.Describe(typeof(IAsyncInterceptor), (sp) =>
                     {
-                        PropertyInfo typeClass = item.GetType().GetProperty("TypeClass", BindingFlags.NonPublic | BindingFlags.Instance);
-                        string nameClass = typeof(TImplementation).Name;
-                        if (string.IsNullOrEmpty((string)typeClass.GetValue(item)))
-                        {
-                            typeClass.SetValue(item, nameClass);
-                        }
                         item.GetType().GetProperty("ServiceProvider", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(item, sp);
                         AsyncInterceptorBaseAttribute interceptor = Activator.CreateInstance<AsyncInterceptorBaseAttribute>();
                         interceptor.Order = item.Order;
-                        interceptor.TypeClass = nameClass;
+                        interceptor.TypeClass = typeof(TImplementation).Name;
                         interceptor.Interceptor = item;
                         return interceptor;
                     }, lifetime));
@@ -97,7 +91,6 @@ namespace patterns.strategy
                 {
                     return instancia;
                 }
-
                 IProxyGenerator proxyGenerator = sp.GetService<IProxyGenerator>();
                 IAsyncInterceptor[] interceptors = sp.GetServices<IAsyncInterceptor>()
                 .Where(o => ((AsyncInterceptorBaseAttribute)o)
