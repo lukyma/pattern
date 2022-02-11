@@ -26,7 +26,7 @@ namespace pattern.sample.api
 
             services.AddSingleton<IValidationErrors, ValidationErrors>();
 
-            services.AddScopedProxyInterceptor<ITestService, TestService>();
+            services.AddProxyInterceptor<ITestService, TestService>(ServiceLifetime.Scoped);
             services.AddScoppedStrategy<IStrategy<TestStrategyRequest, TestStrategyResponse>, TestStrategy>();
             services.AddScoppedStrategy<IStrategy<TestStrategyRequest2, TestStrategyResponse2>, TestStrategy2>();
         }
