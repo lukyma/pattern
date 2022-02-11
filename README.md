@@ -1,6 +1,6 @@
 # Introduction 
 This package aims to facilitate the inclusion of design patterns applied to the Asp.net Core, 
-integrating concepts of AOP (DynamicProxy) and Validation using FluentValidation.
+integrating concepts of AOP (DynamicProxy).
 
 Implemented patterns:
 Strategy
