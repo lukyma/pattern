@@ -8,9 +8,9 @@ Strategy
 # pattern
 Patterns aplicados ao asp.net core.
 
-1 - AOP Pattern
+# AOP Pattern
 
-# Instructions
+### Instructions
 
 1 - Create Custom intercept attribute inheriting from ```InterceptorAttribute```
 
@@ -62,9 +62,9 @@ Patterns aplicados ao asp.net core.
 services.AddProxyInterceptor<ITestService, TestService>(ServiceLifetime.Scoped);
 ```
  
-2 - Strategy Pattern
+# Strategy Pattern
 
-# Instructions
+### Instructions
 
 1 - Include the following code without Startup.cs, as it will not work in its entirety without it.
 ```
