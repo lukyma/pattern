@@ -26,9 +26,11 @@ namespace pattern.sample.api
 
             services.AddSingleton<IValidationErrors, ValidationErrors>();
 
-            services.AddProxyInterceptor<ITestService, TestService>(ServiceLifetime.Scoped);
-            services.AddScoppedStrategy<IStrategy<TestStrategyRequest, TestStrategyResponse>, TestStrategy>();
-            services.AddScoppedStrategy<IStrategy<TestStrategyRequest2, TestStrategyResponse2>, TestStrategy2>();
+            //services.AddProxyInterceptor<ITestService, TestService>(ServiceLifetime.Scoped);
+
+            services.AddSingletonProxyInterceptor<ITestService, TestService>();
+            services.AddScoppedStrategy<IStrategy<TestStrategyRequest, TestStrategyResponse>, TestStrategy>(true);
+            //services.AddScoppedStrategy<IStrategy<TestStrategyRequest2, TestStrategyResponse2>, TestStrategy2>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

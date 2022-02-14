@@ -13,19 +13,63 @@ namespace patterns.strategy
     public static class ServiceExtensions
     {
         /// <summary>
+        /// Add transient strategy
+        /// </summary>
+        /// <typeparam name="TInterface">Interface the type IStrategy<,> </typeparam>
+        /// <typeparam name="TImplementation">Implementation of IStrategy<,> </typeparam>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddTransientStrategy<TInterface, TImplementation>(this IServiceCollection services, bool withInterceptor = false)
+            where TInterface : IStrategy
+            where TImplementation : class, IStrategy
+
+        {
+            return AddStrategy<TInterface, TImplementation>(services, ServiceLifetime.Transient, withInterceptor);
+        }
+
+        /// <summary>
+        /// Add singleton strategy
+        /// </summary>
+        /// <typeparam name="TInterface">Interface the type IStrategy<,> </typeparam>
+        /// <typeparam name="TImplementation">Implementation of IStrategy<,> </typeparam>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddSingletonStrategy<TInterface, TImplementation>(this IServiceCollection services, bool withInterceptor = false)
+            where TInterface : IStrategy
+            where TImplementation : class, IStrategy
+
+        {
+            return AddStrategy<TInterface, TImplementation>(services, ServiceLifetime.Singleton, withInterceptor);
+        }
+
+        /// <summary>
         /// Add scoped strategy
         /// </summary>
         /// <typeparam name="TInterface">Interface the type IStrategy<,> </typeparam>
         /// <typeparam name="TImplementation">Implementation of IStrategy<,> </typeparam>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddScoppedStrategy<TInterface, TImplementation>(this IServiceCollection services)
+        public static IServiceCollection AddScoppedStrategy<TInterface, TImplementation>(this IServiceCollection services, bool withInterceptor = false)
             where TInterface : IStrategy
             where TImplementation : class, IStrategy
 
         {
-            return AddStrategy<TInterface, TImplementation>(services, ServiceLifetime.Scoped);
+            return AddStrategy<TInterface, TImplementation>(services, ServiceLifetime.Scoped, withInterceptor);
         }
+
+        /// <summary>
+        /// Add Service with proxy interceptor and with ServiceLifeTime Singleton
+        /// </summary>
+        /// <typeparam name="TInterface">Interface service type</typeparam>
+        /// <typeparam name="TImplementation">Implementation service type</typeparam>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddSingletonProxyInterceptor<TInterface, TImplementation>(this IServiceCollection services)
+            where TImplementation : class
+        {
+            return AddProxyInterceptor<TInterface, TImplementation>(services, ServiceLifetime.Singleton);
+        }
+
         /// <summary>
         /// Add Service with proxy interceptor and with ServiceLifeTime Scoped
         /// </summary>
@@ -37,6 +81,19 @@ namespace patterns.strategy
             where TImplementation : class
         {
             return AddProxyInterceptor<TInterface, TImplementation>(services, ServiceLifetime.Scoped);
+        }
+
+        /// <summary>
+        /// Add Service with proxy interceptor and with ServiceLifeTime Singleton
+        /// </summary>
+        /// <typeparam name="TInterface">Interface service type</typeparam>
+        /// <typeparam name="TImplementation">Implementation service type</typeparam>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddTransientProxyInterceptor<TInterface, TImplementation>(this IServiceCollection services)
+            where TImplementation : class
+        {
+            return AddProxyInterceptor<TInterface, TImplementation>(services, ServiceLifetime.Transient);
         }
 
         /// <summary>
@@ -64,25 +121,6 @@ namespace patterns.strategy
                 services.Add(ServiceDescriptor.Describe(typeof(IProxyGenerator), typeof(ProxyGenerator), ServiceLifetime.Singleton));
             }
 
-            IList<object> attributesInterceptor = new List<object>();
-
-            if (methodsInterceptors.Any())
-            {
-                foreach (var item in methodsInterceptors)
-                {
-                    services.Add(ServiceDescriptor.Describe(typeof(IAsyncInterceptor), (sp) =>
-                    {
-                        item.GetType().GetProperty("ServiceProvider", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(item, sp);
-                        AsyncInterceptorBaseAttribute interceptor = Activator.CreateInstance<AsyncInterceptorBaseAttribute>();
-                        interceptor.Order = item.Order;
-                        interceptor.TypeClass = typeof(TImplementation).Name;
-                        interceptor.Interceptor = item;
-                        return interceptor;
-                    }, lifetime));
-                }
-            }
-
-
             services.Add(ServiceDescriptor.Describe(typeInterface, (sp) =>
             {
                 object instancia = ActivatorUtilities.GetServiceOrCreateInstance(sp, typeof(TImplementation));
@@ -91,14 +129,21 @@ namespace patterns.strategy
                 {
                     return instancia;
                 }
+
+                IList<IAsyncInterceptor> asyncInterceptors = new List<IAsyncInterceptor>();
+
+                foreach (var item in methodsInterceptors)
+                {
+                    item.GetType().GetProperty("ServiceProvider", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(item, sp);
+                    AsyncInterceptorBaseAttribute interceptor = Activator.CreateInstance<AsyncInterceptorBaseAttribute>();
+                    interceptor.Order = item.Order;
+                    interceptor.TypeClass = typeof(TImplementation).Name;
+                    interceptor.Interceptor = item;
+                    asyncInterceptors.Add(interceptor);
+                }
+
                 IProxyGenerator proxyGenerator = sp.GetService<IProxyGenerator>();
-                IAsyncInterceptor[] interceptors = sp.GetServices<IAsyncInterceptor>()
-                .Where(o => ((AsyncInterceptorBaseAttribute)o)
-                           .GetType()
-                           .GetProperty("TypeClass", BindingFlags.NonPublic | BindingFlags.Instance)
-                           .GetValue(o) as string == instancia.GetType().Name)
-                .OrderBy(o => ((AsyncInterceptorBaseAttribute)o).Order)
-                .ToArray();
+                IAsyncInterceptor[] interceptors = asyncInterceptors.ToArray();
                 object proxy = proxyGenerator.CreateInterfaceProxyWithTarget(typeof(TInterface), instancia, interceptors);
 
                 if (instancia is IDisposable disposable)
@@ -110,19 +155,7 @@ namespace patterns.strategy
 
             return services;
         }
-        //public static ServiceCollection AddTransientStrategy<TInterface, TImplementation>(this IServiceCollection services)
-        //    where TInterface : IStrategy
-        //    where TImplementation : class, IStrategy
-        //{
-        //    return AddStrategy<TInterface, TImplementation>(services, ServiceLifetime.Transient);
-        //}
-        //public static ServiceCollection AddSingletonStrategy<TInterface, TImplementation>(this IServiceCollection services)
-        //    where TInterface : IStrategy
-        //    where TImplementation : class, IStrategy
-        //{
-        //    return AddStrategy<TInterface, TImplementation>(services, ServiceLifetime.Singleton);
-        //}
-        public static IServiceCollection AddStrategy<TInterface, TImplementation>(this IServiceCollection services, ServiceLifetime lifetime)
+        public static IServiceCollection AddStrategy<TInterface, TImplementation>(this IServiceCollection services, ServiceLifetime lifetime, bool withInterceptor)
             where TInterface : IStrategy
             where TImplementation : class, IStrategy
         {
@@ -130,67 +163,17 @@ namespace patterns.strategy
             var serviceTypeStrategyContext = typeof(IStrategyContext);
             var implementationTypeStrategyContext = typeof(StrategyContext);
 
-            var methodsInterceptors = typeof(TImplementation)
-                .GetMethods()
-                .Where(o => o.CustomAttributes.Any(p => p.AttributeType.IsSubclassOf(typeof(InterceptorAttribute))))
-                .SelectMany(o => o.GetCustomAttributes(false).Where(p => p.GetType().IsSubclassOf(typeof(InterceptorAttribute))).Select(o => o))
-                .Select(o => (InterceptorAttribute)o);
-
-            if (!services.Any(o => o.ServiceType == typeof(IProxyGenerator)))
+            if (withInterceptor)
             {
-                services.Add(ServiceDescriptor.Describe(typeof(IProxyGenerator), typeof(ProxyGenerator), ServiceLifetime.Singleton));
+                services.AddProxyInterceptor<TInterface, TImplementation>(lifetime);
             }
-
-            IList<object> attributesInterceptor = new List<object>();
-
-            if (methodsInterceptors.Any())
+            else
             {
-                foreach (var item in methodsInterceptors)
+                services.Add(ServiceDescriptor.Describe(typeInterface, (sp) =>
                 {
-                    services.Add(ServiceDescriptor.Describe(typeof(IAsyncInterceptor), (sp) =>
-                    {
-                        PropertyInfo typeClass = item.GetType().GetProperty("TypeClass", BindingFlags.NonPublic | BindingFlags.Instance);
-                        string nameClass = typeof(TImplementation).Name;
-                        if (string.IsNullOrEmpty((string)typeClass.GetValue(item)))
-                        {
-                            typeClass.SetValue(item, nameClass);
-                        }
-                        item.GetType().GetProperty("ServiceProvider", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(item, sp);
-                        AsyncInterceptorBaseAttribute interceptor = Activator.CreateInstance<AsyncInterceptorBaseAttribute>();
-                        interceptor.Order = item.Order;
-                        interceptor.TypeClass = nameClass;
-                        interceptor.Interceptor = item;
-                        return interceptor;
-                    }, lifetime));
-                }
+                    return ActivatorUtilities.GetServiceOrCreateInstance(sp, typeof(TImplementation));
+                }, lifetime));
             }
-
-
-            services.Add(ServiceDescriptor.Describe(typeInterface, (sp) =>
-            {
-                object instancia = ActivatorUtilities.GetServiceOrCreateInstance(sp, typeof(TImplementation));
-
-                if (!methodsInterceptors.Any())
-                {
-                    return instancia;
-                }
-
-                IProxyGenerator proxyGenerator = sp.GetService<IProxyGenerator>();
-                IAsyncInterceptor[] interceptors = sp.GetServices<IAsyncInterceptor>()
-                .Where(o => ((AsyncInterceptorBaseAttribute)o)
-                           .GetType()
-                           .GetProperty("TypeClass", BindingFlags.NonPublic | BindingFlags.Instance)
-                           .GetValue(o) as string == instancia.GetType().Name)
-                .OrderBy(o => ((AsyncInterceptorBaseAttribute)o).Order)
-                .ToArray();
-                object proxy = proxyGenerator.CreateInterfaceProxyWithTarget(typeof(TInterface), instancia, interceptors);
-
-                if (instancia is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
-                return proxy;
-            }, lifetime));
 
             var servicesStrategy = services
             .Where(s => s.ServiceType == typeInterface)
