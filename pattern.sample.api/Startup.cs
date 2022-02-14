@@ -28,7 +28,7 @@ namespace pattern.sample.api
 
             //services.AddProxyInterceptor<ITestService, TestService>(ServiceLifetime.Scoped);
 
-            services.AddSingletonProxyInterceptor<ITestService, TestService>();
+            services.AddScopedProxyInterceptor<ITestService, TestService>();
             services.AddScoppedStrategy<IStrategy<TestStrategyRequest, TestStrategyResponse>, TestStrategy>(true);
             //services.AddScoppedStrategy<IStrategy<TestStrategyRequest2, TestStrategyResponse2>, TestStrategy2>();
         }

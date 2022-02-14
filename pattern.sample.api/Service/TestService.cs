@@ -15,6 +15,7 @@ namespace pattern.sample.api.Service
         {
         }
 
+        [TestInterceptor2]
         public void Teste2()
         {
         }

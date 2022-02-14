@@ -24,6 +24,22 @@ namespace pattern.sample.api.Interceptor
         }
     }
 
+    public class TestInterceptor2Attribute : InterceptorAttribute, IAsyncInterceptor
+    {
+        public TestInterceptor2Attribute()
+        {
+        }
+        protected override Task InterceptAsync(IInvocation invocation, IInvocationProceedInfo proceedInfo, Func<IInvocation, IInvocationProceedInfo, Task> proceed)
+        {
+            return proceed(invocation, proceedInfo);
+        }
+
+        protected override async Task<TResult> InterceptAsync<TResult>(IInvocation invocation, IInvocationProceedInfo proceedInfo, Func<IInvocation, IInvocationProceedInfo, Task<TResult>> proceed)
+        {
+            return await proceed(invocation, proceedInfo);
+        }
+    }
+
     public class ValidatorInterceptorAttribute : InterceptorAttribute, IAsyncInterceptor
     {
         private Type ValidationType { get; }

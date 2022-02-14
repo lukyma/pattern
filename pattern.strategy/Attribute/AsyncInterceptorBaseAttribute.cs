@@ -104,7 +104,8 @@ namespace pattern.strategy
         {
             if (invocation.MethodInvocationTarget
                 .GetCustomAttributes(false)
-                .Any(p => p.GetType().IsSubclassOf(typeof(AsyncInterceptorBaseAttribute))))
+                .Any(p => p.GetType().IsSubclassOf(typeof(AsyncInterceptorBaseAttribute)) &&
+                          p.GetType() == Interceptor.GetType()))
             {
                 return Interceptor.InterceptAsync(invocation, proceedInfo, proceed);
             }
@@ -126,7 +127,8 @@ namespace pattern.strategy
         {
             if (invocation.MethodInvocationTarget
                 .GetCustomAttributes(false)
-                .Any(p => p.GetType().IsSubclassOf(typeof(AsyncInterceptorBaseAttribute))))
+                .Any(p => p.GetType().IsSubclassOf(typeof(AsyncInterceptorBaseAttribute)) &&
+                          p.GetType() == Interceptor.GetType()))
             {
                 return Interceptor.InterceptAsync(invocation, proceedInfo, proceed);
             }
