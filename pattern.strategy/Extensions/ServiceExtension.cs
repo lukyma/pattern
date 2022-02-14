@@ -112,9 +112,9 @@ namespace patterns.strategy
 
             var methodsInterceptors = typeof(TImplementation)
                 .GetMethods()
-                .Where(o => o.CustomAttributes.Any(p => p.AttributeType.IsSubclassOf(typeof(InterceptorAttribute))))
-                .SelectMany(o => o.GetCustomAttributes(false).Where(p => p.GetType().IsSubclassOf(typeof(InterceptorAttribute))).Select(o => o))
-                .Select(o => (InterceptorAttribute)o);
+                .Where(o => o.CustomAttributes.Any(p => p.AttributeType.IsSubclassOf(typeof(InterceptorAttribute))));
+
+                
 
             if (!services.Any(o => o.ServiceType == typeof(IProxyGenerator)))
             {
@@ -134,12 +134,19 @@ namespace patterns.strategy
 
                 foreach (var item in methodsInterceptors)
                 {
-                    item.GetType().GetProperty("ServiceProvider", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(item, sp);
-                    AsyncInterceptorBaseAttribute interceptor = Activator.CreateInstance<AsyncInterceptorBaseAttribute>();
-                    interceptor.Order = item.Order;
-                    interceptor.TypeClass = typeof(TImplementation).Name;
-                    interceptor.Interceptor = item;
-                    asyncInterceptors.Add(interceptor);
+                    string nameMethod = item.Name;
+                    var interceptorAttributes = item.GetCustomAttributes(false).Where(p => p.GetType().IsSubclassOf(typeof(InterceptorAttribute))).Select(o => (InterceptorAttribute)o);
+                    foreach (var item2 in interceptorAttributes)
+                    {
+                        item2.ServiceProvider = sp;
+                        AsyncInterceptorBaseAttribute interceptor = Activator.CreateInstance<AsyncInterceptorBaseAttribute>();
+                        interceptor.MethodName = nameMethod;
+                        interceptor.Order = item2.Order;
+                        interceptor.TypeClass = typeof(TImplementation).Name;
+                        interceptor.Interceptor = item2;
+                        var teste = item.GetType();
+                        asyncInterceptors.Add(interceptor);
+                    }
                 }
 
                 IProxyGenerator proxyGenerator = sp.GetService<IProxyGenerator>();

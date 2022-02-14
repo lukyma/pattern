@@ -10,6 +10,7 @@ namespace pattern.sample.api.Interceptor
 {
     public class TestInterceptorAttribute : InterceptorAttribute, IAsyncInterceptor
     {
+        public string TypeTest { get; set; }
         public TestInterceptorAttribute()
         {
         }

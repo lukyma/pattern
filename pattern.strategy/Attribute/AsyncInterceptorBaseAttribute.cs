@@ -37,6 +37,7 @@ namespace pattern.strategy
         public int Order { get; set; }
         internal AsyncInterceptorBaseAttribute Interceptor { get; set; }
         internal string TypeClass { get; set; }
+        internal string MethodName { get; set; }
         internal IServiceProvider ServiceProvider { get; set; }
         /// <summary>
         /// Returns the instance that is registered in the ServiceProvider.
@@ -105,7 +106,8 @@ namespace pattern.strategy
             if (invocation.MethodInvocationTarget
                 .GetCustomAttributes(false)
                 .Any(p => p.GetType().IsSubclassOf(typeof(AsyncInterceptorBaseAttribute)) &&
-                          p.GetType() == Interceptor.GetType()))
+                          p.GetType() == Interceptor.GetType()) && 
+                MethodName == invocation.MethodInvocationTarget.Name)
             {
                 return Interceptor.InterceptAsync(invocation, proceedInfo, proceed);
             }
@@ -128,7 +130,7 @@ namespace pattern.strategy
             if (invocation.MethodInvocationTarget
                 .GetCustomAttributes(false)
                 .Any(p => p.GetType().IsSubclassOf(typeof(AsyncInterceptorBaseAttribute)) &&
-                          p.GetType() == Interceptor.GetType()))
+                          p.GetType() == Interceptor.GetType()) && MethodName == invocation.MethodInvocationTarget.Name)
             {
                 return Interceptor.InterceptAsync(invocation, proceedInfo, proceed);
             }
