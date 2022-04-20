@@ -13,15 +13,23 @@ namespace pattern.strategy
     /// </summary>
     public abstract class InterceptorAttribute : AsyncInterceptorBaseAttribute, IAsyncInterceptor
     {
-        protected override abstract Task InterceptAsync(
+        internal override Task InterceptAsync(
             IInvocation invocation,
             IInvocationProceedInfo proceedInfo,
-            Func<IInvocation, IInvocationProceedInfo, Task> proceed);
+            Func<IInvocation, IInvocationProceedInfo, Task> proceed)
+        {
+           return HandleInterceptAsync(invocation, () => Task.FromResult(proceed(invocation, proceedInfo)));
+        }
 
-        protected override abstract Task<TResult> InterceptAsync<TResult>(
+        internal override Task<TResult> InterceptAsync<TResult>(
             IInvocation invocation,
             IInvocationProceedInfo proceedInfo,
-            Func<IInvocation, IInvocationProceedInfo, Task<TResult>> proceed);
+            Func<IInvocation, IInvocationProceedInfo, Task<TResult>> proceed)
+        {
+            return HandleInterceptAsync(invocation, () => proceed(invocation, proceedInfo));
+        }
+
+        protected abstract Task<TResult> HandleInterceptAsync<TResult>(IInvocation invocation, Func<Task<TResult>> result);
     }
 
     /// <summary>
@@ -98,7 +106,7 @@ namespace pattern.strategy
         /// <param name="proceedInfo">The <see cref="IInvocationProceedInfo"/>.</param>
         /// <param name="proceed">The function to proceed the <paramref name="proceedInfo"/>.</param>
         /// <returns>A <see cref="Task" /> object that represents the asynchronous operation.</returns>
-        protected virtual Task InterceptAsync(
+        internal virtual Task InterceptAsync(
             IInvocation invocation,
             IInvocationProceedInfo proceedInfo,
             Func<IInvocation, IInvocationProceedInfo, Task> proceed)
@@ -122,7 +130,7 @@ namespace pattern.strategy
         /// <param name="proceedInfo">The <see cref="IInvocationProceedInfo"/>.</param>
         /// <param name="proceed">The function to proceed the <paramref name="proceedInfo"/>.</param>
         /// <returns>A <see cref="Task" /> object that represents the asynchronous operation.</returns>
-        protected virtual Task<TResult> InterceptAsync<TResult>(
+        internal virtual Task<TResult> InterceptAsync<TResult>(
             IInvocation invocation,
             IInvocationProceedInfo proceedInfo,
             Func<IInvocation, IInvocationProceedInfo, Task<TResult>> proceed)

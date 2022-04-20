@@ -14,7 +14,7 @@ namespace pattern.sample.api.StrategyHandler
         {
             TestService = testService;
         }
-        //[ValidatorInterceptor(typeof(TestStrategyRequestValidator), Order = 1)]
+        [ValidatorInterceptor(typeof(TestStrategyRequestValidator), Order = 1)]
         [TestInterceptor(Order = 2)]
         public async Task<TestStrategyResponse> HandleAsync(TestStrategyRequest request, CancellationToken cancellationToken)
         {
@@ -47,6 +47,7 @@ namespace pattern.sample.api.StrategyHandler
     }
     public class TestStrategyResponse
     {
+        public string Teste { get; set; } = "Teste";
     }
 
     public class TestStrategyRequest2

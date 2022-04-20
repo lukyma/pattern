@@ -1,18 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31112.23
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pattern.strategy", "pattern.strategy\pattern.strategy.csproj", "{5E2896B0-446B-4847-BF80-576157066C1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pattern.strategy", "pattern.strategy\pattern.strategy.csproj", "{5E2896B0-446B-4847-BF80-576157066C1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pattern.sample.api", "pattern.sample.api\pattern.sample.api.csproj", "{4C939F88-F8D2-4761-B66B-358EE363F876}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pattern.sample.api", "pattern.sample.api\pattern.sample.api.csproj", "{4C939F88-F8D2-4761-B66B-358EE363F876}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2627FF49-2203-457E-B331-21679CD6ED60}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pattern.strategy.test", "pattern.strategy.test\pattern.strategy.test.csproj", "{C5955569-F26D-4563-95A3-56EB9C4C822E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pattern.strategy.test", "pattern.strategy.test\pattern.strategy.test.csproj", "{C5955569-F26D-4563-95A3-56EB9C4C822E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pattern.benchmark", "pattern.benchmark\pattern.benchmark.csproj", "{5932724A-708C-4CBF-8C02-FAED126410B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +34,10 @@ Global
 		{C5955569-F26D-4563-95A3-56EB9C4C822E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5955569-F26D-4563-95A3-56EB9C4C822E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5955569-F26D-4563-95A3-56EB9C4C822E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5932724A-708C-4CBF-8C02-FAED126410B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5932724A-708C-4CBF-8C02-FAED126410B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5932724A-708C-4CBF-8C02-FAED126410B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5932724A-708C-4CBF-8C02-FAED126410B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -27,15 +27,17 @@ namespace pattern.sample.api.Controllers
         [HttpGet]
         public async Task<IEnumerable<WeatherForecast>> Get(CancellationToken cancellationToken)
         {
-            var response = await StrategyContext.HandlerAsync<TestStrategyRequest, TestStrategyResponse>(new TestStrategyRequest(), cancellationToken);
+            var response = await StrategyContext.HandlerAsync<TestStrategyRequest, TestStrategyResponse>(new TestStrategyRequest() { Name = "Teste123" }, cancellationToken);
             var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            var response1 = Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = rng.Next(-20, 55),
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+
+            return response1;
         }
     }
 }

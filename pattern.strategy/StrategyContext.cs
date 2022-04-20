@@ -23,7 +23,17 @@ namespace patterns.strategy
         public Task<TResponse> HandlerAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken)
         {
             var strategy = ServiceProvider.GetService(typeof(IStrategy<TRequest, TResponse>)) as IStrategy<TRequest, TResponse>;
-            return strategy.HandleAsync(request, cancellationToken);
+            try
+            {
+                return strategy.HandleAsync(request, cancellationToken);
+            }
+            catch
+            {
+                return strategy.HandleAsync(request, cancellationToken);
+            }
+            finally
+            {
+            }
         }
     }
 }

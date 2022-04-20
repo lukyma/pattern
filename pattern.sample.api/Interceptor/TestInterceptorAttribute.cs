@@ -14,14 +14,11 @@ namespace pattern.sample.api.Interceptor
         public TestInterceptorAttribute()
         {
         }
-        protected override Task InterceptAsync(IInvocation invocation, IInvocationProceedInfo proceedInfo, Func<IInvocation, IInvocationProceedInfo, Task> proceed)
-        {
-            return proceed(invocation, proceedInfo);
-        }
 
-        protected override async Task<TResult> InterceptAsync<TResult>(IInvocation invocation, IInvocationProceedInfo proceedInfo, Func<IInvocation, IInvocationProceedInfo, Task<TResult>> proceed)
+        protected override async Task<TResult> HandleInterceptAsync<TResult>(IInvocation invocation, Func<Task<TResult>> result)
         {
-            return await proceed(invocation, proceedInfo);
+            var teste = await result.Invoke();
+            return teste;
         }
     }
 
@@ -30,14 +27,10 @@ namespace pattern.sample.api.Interceptor
         public TestInterceptor2Attribute()
         {
         }
-        protected override Task InterceptAsync(IInvocation invocation, IInvocationProceedInfo proceedInfo, Func<IInvocation, IInvocationProceedInfo, Task> proceed)
-        {
-            return proceed(invocation, proceedInfo);
-        }
 
-        protected override async Task<TResult> InterceptAsync<TResult>(IInvocation invocation, IInvocationProceedInfo proceedInfo, Func<IInvocation, IInvocationProceedInfo, Task<TResult>> proceed)
+        protected override Task<TResult> HandleInterceptAsync<TResult>(IInvocation invocation, Func<Task<TResult>> result)
         {
-            return await proceed(invocation, proceedInfo);
+            return result.Invoke();
         }
     }
 
@@ -70,24 +63,14 @@ namespace pattern.sample.api.Interceptor
             return true;
         }
 
-        protected override async Task InterceptAsync(IInvocation invocation, IInvocationProceedInfo proceedInfo, Func<IInvocation, IInvocationProceedInfo, Task> proceed)
-        {
-            if (!await ValidateAsync(invocation))
-            {
-                return;
-            }
-
-            await proceed(invocation, proceedInfo).ConfigureAwait(false);
-        }
-
-        protected override async Task<TResult> InterceptAsync<TResult>(IInvocation invocation, IInvocationProceedInfo proceedInfo, Func<IInvocation, IInvocationProceedInfo, Task<TResult>> proceed)
+        protected override async Task<TResult> HandleInterceptAsync<TResult>(IInvocation invocation, Func<Task<TResult>> result)
         {
             if (!await ValidateAsync(invocation))
             {
                 return default;
             }
 
-            return await proceed(invocation, proceedInfo).ConfigureAwait(false);
+            return await result.Invoke();
         }
     }
 }

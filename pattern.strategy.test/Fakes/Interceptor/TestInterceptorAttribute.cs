@@ -4,16 +4,11 @@ using System.Threading.Tasks;
 
 namespace pattern.strategy.test.Fakes.Interceptor
 {
-    public class TestInterceptorAttribute : AsyncInterceptorBaseAttribute, IAsyncInterceptor
+    public class TestInterceptorAttribute : InterceptorAttribute
     {
-        protected override Task InterceptAsync(IInvocation invocation, IInvocationProceedInfo proceedInfo, Func<IInvocation, IInvocationProceedInfo, Task> proceed)
+        protected override Task<TResult> HandleInterceptAsync<TResult>(IInvocation invocation, Func<Task<TResult>> result)
         {
-            return proceed(invocation, proceedInfo);
-        }
-
-        protected override Task<TResult> InterceptAsync<TResult>(IInvocation invocation, IInvocationProceedInfo proceedInfo, Func<IInvocation, IInvocationProceedInfo, Task<TResult>> proceed)
-        {
-            return proceed(invocation, proceedInfo);
+            return result.Invoke();
         }
     }
 }
