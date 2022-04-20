@@ -29,7 +29,7 @@ namespace pattern.strategy
             return HandleInterceptAsync(invocation, () => proceed(invocation, proceedInfo));
         }
 
-        protected abstract Task<TResult> HandleInterceptAsync<TResult>(IInvocation invocation, Func<Task<TResult>> result);
+        protected abstract Task<TResult> HandleInterceptAsync<TResult>(IInvocation invocation, Func<Task<TResult>> proceed);
     }
 
     /// <summary>
