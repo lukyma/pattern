@@ -1,3 +1,4 @@
+[![Build Status](https://lucasmachado.visualstudio.com/MyTests/_apis/build/status/pattern?branchName=main)](https://lucasmachado.visualstudio.com/MyTests/_build/latest?definitionId=26&branchName=main)
 [![NuGet](https://img.shields.io/nuget/dt/Pattern.svg)](https://www.nuget.org/packages/Pattern) 
 [![NuGet](https://img.shields.io/nuget/vpre/Pattern.svg)](https://www.nuget.org/packages/Pattern)
 
