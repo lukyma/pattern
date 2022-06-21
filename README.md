@@ -1,3 +1,6 @@
+[![NuGet](https://img.shields.io/nuget/dt/Pattern.svg)](https://www.nuget.org/packages/Pattern) 
+[![NuGet](https://img.shields.io/nuget/vpre/Pattern.svg)](https://www.nuget.org/packages/Pattern)
+
 # Introduction 
 This package aims to facilitate the inclusion of design patterns applied to the Asp.net Core, 
 integrating concepts of AOP (DynamicProxy).
