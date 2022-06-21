@@ -17,8 +17,8 @@ namespace pattern.sample.api.Interceptor
 
         protected override async Task<TResult> HandleInterceptAsync<TResult>(IInvocation invocation, Func<Task<TResult>> result)
         {
-            var teste = await result.Invoke();
-            return teste;
+            var response = await result();
+            return response;
         }
     }
 
@@ -45,22 +45,14 @@ namespace pattern.sample.api.Interceptor
         private async Task<bool> ValidateAsync(IInvocation invocation)
         {
             IValidationErrors validationFailures = GetService<IValidationErrors>();
-
-            var validationAttribute = GetCustomAttribute(invocation.MethodInvocationTarget, typeof(ValidatorInterceptorAttribute));
-
-            if (validationAttribute != null)
+            var validatorInstance = (IValidator)Activator.CreateInstance(ValidationType);
+            var validationContext = new ValidationContext<object>(invocation.Arguments.First());
+            var validation = await validatorInstance.ValidateAsync(validationContext);
+            foreach (var error in validation.Errors)
             {
-                var validatorInstance = (IValidator)Activator.CreateInstance(ValidationType);
-                var validationContext = new ValidationContext<object>(invocation.Arguments.First());
-                var validation = await validatorInstance.ValidateAsync(validationContext);
-                foreach (var error in validation.Errors)
-                {
-                    validationFailures.Add(error);
-                }
-                return validation.IsValid;
+                validationFailures.Add(error);
             }
-
-            return true;
+            return validation.IsValid;
         }
 
         protected override async Task<TResult> HandleInterceptAsync<TResult>(IInvocation invocation, Func<Task<TResult>> result)

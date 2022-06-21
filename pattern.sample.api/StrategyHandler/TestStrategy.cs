@@ -15,11 +15,11 @@ namespace pattern.sample.api.StrategyHandler
             TestService = testService;
         }
         [ValidatorInterceptor(typeof(TestStrategyRequestValidator), Order = 1)]
-        [TestInterceptor(Order = 2)]
+        //[TestInterceptor(Order = 2)]
         public async Task<TestStrategyResponse> HandleAsync(TestStrategyRequest request, CancellationToken cancellationToken)
         {
             TestService.Teste1();
-            TestService.Teste2();
+            //TestService.Teste2();
             //var teste = this.GetType().GetProperty("Teste", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             return await HandleAsync2(request, cancellationToken);
         }
