@@ -63,8 +63,10 @@ Patterns aplicados ao asp.net core.
 3 - Include in ServiceCollection with DependencyIncection
 
 ```
-services.AddProxyInterceptor<ITestService, TestService>(ServiceLifetime.Scoped);
+services.AddScopedProxyInterceptor<ITestService, TestService>();
 ```
+Or with a different life cycle, according to your need.
+
  
 # Strategy Pattern
 
