@@ -13,11 +13,12 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- script: |
+    export SONAR_TOKEN=$(SONAR_TOKEN)
+    echo $(SONAR_TOKEN)
+  displayName: 'Sonar Token'
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'Dotnet Build'
 - script: dotnet test
-  displayName: 'Dotnet Test'
-- script: |
-    echo $(SONAR_TOKEN)
   displayName: 'Dotnet Test'
 
