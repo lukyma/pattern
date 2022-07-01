@@ -17,4 +17,7 @@ steps:
   displayName: 'Dotnet Build'
 - script: dotnet test
   displayName: 'Dotnet Test'
+- script: |
+    echo $(SONAR_TOKEN)
+  displayName: 'Dotnet Test'
 
