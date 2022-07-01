@@ -11,14 +11,14 @@ namespace pattern.strategy
     /// <summary>
     /// Attribute to be used in your interceptors.
     /// </summary>
-    public abstract class InterceptorAttribute : AsyncInterceptorBaseAttribute, IAsyncInterceptor
+    public abstract class InterceptorAttribute : AsyncInterceptorBaseAttribute
     {
         internal override Task InterceptAsync(
             IInvocation invocation,
             IInvocationProceedInfo proceedInfo,
             Func<IInvocation, IInvocationProceedInfo, Task> proceed)
         {
-           return HandleInterceptAsync(invocation, () => Task.FromResult(proceed(invocation, proceedInfo)));
+            return HandleInterceptAsync(invocation, () => Task.FromResult(proceed(invocation, proceedInfo)));
         }
 
         internal override Task<TResult> InterceptAsync<TResult>(
@@ -57,13 +57,13 @@ namespace pattern.strategy
             return (T)ServiceProvider.GetService(typeof(T));
         }
         private static readonly MethodInfo InterceptSynchronousMethodInfo =
-            typeof(AsyncInterceptorBase).GetMethod(
+            typeof(AsyncInterceptorBaseAttribute).GetMethod(
                 nameof(InterceptSynchronousResult), BindingFlags.Static | BindingFlags.NonPublic)!;
 
         private static readonly ConcurrentDictionary<Type, GenericSynchronousHandler> GenericSynchronousHandlers =
             new ConcurrentDictionary<Type, GenericSynchronousHandler>
             {
-                [typeof(void)] = InterceptSynchronousVoid,
+                [typeof(void)] = InterceptSynchronousVoid
             };
 
         private delegate void GenericSynchronousHandler(AsyncInterceptorBaseAttribute me, IInvocation invocation);
@@ -114,7 +114,7 @@ namespace pattern.strategy
             if (invocation.MethodInvocationTarget
                 .GetCustomAttributes(false)
                 .Any(p => p.GetType().IsSubclassOf(typeof(AsyncInterceptorBaseAttribute)) &&
-                          p.GetType() == Interceptor.GetType()) && 
+                          p.GetType() == Interceptor.GetType()) &&
                 MethodName == invocation.MethodInvocationTarget.Name)
             {
                 return Interceptor.InterceptAsync(invocation, proceedInfo, proceed);

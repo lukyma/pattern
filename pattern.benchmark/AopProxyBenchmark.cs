@@ -1,5 +1,4 @@
 ﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Jobs;
 using Castle.DynamicProxy;
 using Microsoft.Extensions.DependencyInjection;
 using pattern.benchmark.Interceptor;

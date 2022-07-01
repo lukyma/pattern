@@ -8,7 +8,7 @@ namespace pattern.strategy.test.Fakes.Interceptor
     {
         protected override Task<TResult> HandleInterceptAsync<TResult>(IInvocation invocation, Func<Task<TResult>> result)
         {
-            return result.Invoke();
+            return result();
         }
     }
 }

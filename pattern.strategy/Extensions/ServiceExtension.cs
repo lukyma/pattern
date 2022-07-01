@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Reflection;
 
 namespace patterns.strategy
 {
@@ -114,7 +113,7 @@ namespace patterns.strategy
                 .GetMethods()
                 .Where(o => o.CustomAttributes.Any(p => p.AttributeType.IsSubclassOf(typeof(InterceptorAttribute))));
 
-                
+
 
             if (!services.Any(o => o.ServiceType == typeof(IProxyGenerator)))
             {

@@ -1,4 +1,4 @@
-﻿using pattern.sample.api.Interceptor;
+﻿using pattern.strategy.test.Fakes.Interceptor;
 using patterns.strategy;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,7 +8,7 @@ namespace pattern.strategy.test.Fakes
 {
     public class RequestStrategyFake : IStrategy<Request, Response>
     {
-        [ValidatorInterceptor(typeof(RequestValidator))]
+        [TestInterceptor]
         public async Task<Response> HandleAsync(Request request, CancellationToken cancellationToken)
         {
             return new Response();

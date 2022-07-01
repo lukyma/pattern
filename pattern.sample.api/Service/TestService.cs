@@ -10,12 +10,12 @@ namespace pattern.sample.api.Service
 
     public class TestService : ITestService
     {
-        [TestInterceptor(TypeTest = "1")]
+        [TestInterceptor(Order = 1, TypeTest = "teste1")]
         public void Teste1()
         {
         }
 
-        [TestInterceptor(TypeTest = "2")]
+        [TestInterceptor(Order = 1, TypeTest = "teste2")]
         public void Teste2()
         {
         }

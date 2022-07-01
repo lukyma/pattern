@@ -1,10 +1,4 @@
-﻿using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Running;
-using Microsoft.Extensions.DependencyInjection;
-using pattern.benchmark.Strategy;
-using patterns.strategy;
-using System;
-using System.Threading;
+﻿using System;
 using System.Threading.Tasks;
 using static pattern.benchmark.AopProxyBenchmark;
 

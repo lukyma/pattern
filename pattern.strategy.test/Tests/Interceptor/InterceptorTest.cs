@@ -1,7 +1,11 @@
 ﻿using Castle.DynamicProxy;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using pattern.strategy.test.Fakes;
 using pattern.strategy.test.Fakes.Interceptor;
+using patterns.strategy;
+using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using Xunit;
 using static pattern.strategy.test.Fakes.RequestFake;
@@ -25,7 +29,7 @@ namespace pattern.strategy.test.Tests.Validation
 
             interceptor.InterceptAsynchronous(invocationMock.Object);
 
-            //Assert.True(validatorInterceptor.ValidationFailures.Any());
+            invocationMock.Verify(o => o.CaptureProceedInfo(), Times.Once);
         }
 
         [Fact]
@@ -54,6 +58,24 @@ namespace pattern.strategy.test.Tests.Validation
                 .Returns(proceedInfo.Object);
 
             interceptor.InterceptAsynchronous(invocationMock.Object);
+
+            invocationMock.Verify(o => o.CaptureProceedInfo(), Times.Once);
+        }
+
+        [Fact]
+        public async Task ValidateSyncProxyInterceptor()
+        {
+            var serviceColletion = new ServiceCollection();
+
+            serviceColletion.AddScopedProxyInterceptor<ITestClassMethodInterceptor, TestClassMethodInterceptor>();
+
+            var serviceProvider = serviceColletion.BuildServiceProvider();
+
+            var proxy = serviceProvider.GetRequiredService<ITestClassMethodInterceptor>();
+
+            proxy.SyncInterceptorVoid();
+            proxy.SyncInterceptorResult();
+            //await proxy.AsyncInterceptorVoid();
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using pattern.sample.api.Interceptor;
 using pattern.sample.api.Service;
-using pattern.sample.api.StrategyHandler.Validator;
 using patterns.strategy;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,16 +13,13 @@ namespace pattern.sample.api.StrategyHandler
         {
             TestService = testService;
         }
-        [ValidatorInterceptor(typeof(TestStrategyRequestValidator), Order = 1)]
-        //[TestInterceptor(Order = 2)]
+        [TestInterceptor]
         public async Task<TestStrategyResponse> HandleAsync(TestStrategyRequest request, CancellationToken cancellationToken)
         {
             TestService.Teste1();
-            //TestService.Teste2();
-            //var teste = this.GetType().GetProperty("Teste", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            TestService.Teste2();
             return await HandleAsync2(request, cancellationToken);
         }
-        //[TestInterceptor(Order = 1)]
         public async Task<TestStrategyResponse> HandleAsync2(TestStrategyRequest request, CancellationToken cancellationToken)
         {
             return new TestStrategyResponse();
