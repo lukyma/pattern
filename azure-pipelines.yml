@@ -26,12 +26,14 @@ steps:
     dotnet sonarscanner begin \
     /o:lucasmachado \
     /k:9D915261-4352-490A-858E-0D73D6BAFBE4 \
+    /d:sonar.coverageReportPaths=../TestResults/SonarQube.xml
     /d:sonar.host.url=https://sonarcloud.io
   displayName: "Sonar Begin"
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'Dotnet Build'
 - script: dotnet test --logger trx --results-directory ../TestResults/ --collect:"XPlat Code Coverage" --no-restore -m:1
   displayName: 'Dotnet Test'
+- script: reportgenerator -reporttypes:"SonarQube" -reports:"../TestResults/**/*.cobertura.xml"
 - script: dotnet sonarscanner end
   displayName: 'Sonar End'
 
