@@ -18,6 +18,8 @@ steps:
     export SONAR_TOKEN=$(SONAR_TOKEN)
     echo $ENV_SONAR_TOKEN
   displayName: 'Sonar Token'
+- script: "dotnet tool install --global dotnet-sonarscanner --version 5.7.1"
+  displayName: "Install Sonnar Scanner"
 - script: |
     dotnet sonarscanner begin \
     /o:lucasmachado \
