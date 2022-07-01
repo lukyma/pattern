@@ -20,15 +20,17 @@ steps:
   displayName: 'Sonar Token'
 - script: "dotnet tool install --global dotnet-sonarscanner --version 5.7.1"
   displayName: "Install Sonnar Scanner"
+- script: "dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.1.9"
+  displayName: "Install ReportGenerator"
 - script: |
     dotnet sonarscanner begin \
     /o:lucasmachado \
     /k:9D915261-4352-490A-858E-0D73D6BAFBE4 \
     /d:sonar.host.url=https://sonarcloud.io
   displayName: "Sonar Begin"
-- script: dotnet build --configuration $(buildConfiguration)
+- script: dotnet build --configuration $(buildConfiguration) --no-restore
   displayName: 'Dotnet Build'
-- script: dotnet test
+- script: dotnet test --logger trx --results-directory ../TestResults/ --collect:"XPlat Code Coverage" --no-restore -m:1
   displayName: 'Dotnet Test'
 - script: dotnet sonarscanner end
   displayName: 'Sonar End'
