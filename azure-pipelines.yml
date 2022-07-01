@@ -14,8 +14,9 @@ variables:
 
 steps:
 - script: |
+    export ENV_SONAR_TOKEN=$(SONAR_TOKEN)
     export SONAR_TOKEN=$(SONAR_TOKEN)
-    echo $(SONAR_TOKEN)
+    echo $ENV_SONAR_TOKEN
   displayName: 'Sonar Token'
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'Dotnet Build'
