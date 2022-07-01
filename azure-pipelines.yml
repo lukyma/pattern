@@ -18,8 +18,16 @@ steps:
     export SONAR_TOKEN=$(SONAR_TOKEN)
     echo $ENV_SONAR_TOKEN
   displayName: 'Sonar Token'
+- script: |
+    dotnet sonarscanner begin \
+    /o:lucasmachado \
+    /k:9D915261-4352-490A-858E-0D73D6BAFBE4 \
+    /d:sonar.host.url=https://sonarcloud.io
+  displayName: "Sonar Begin"
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'Dotnet Build'
 - script: dotnet test
   displayName: 'Dotnet Test'
+- script: dotnet sonarscanner end
+  displayName: 'Sonar End'
 
