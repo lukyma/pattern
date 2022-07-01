@@ -8,12 +8,12 @@ using static pattern.strategy.test.Fakes.RequestFake;
 
 namespace pattern.strategy.test.Tests.Validation
 {
-    public class ValidatorInterceptorTest
+    public class InterceptorTest
     {
         [Fact]
         public void ValidateAsyncIsInvalidRequestTest()
         {
-            var validatorInterceptor = new TestInterceptorAttribute();
+            var interceptor = new TestInterceptorAttribute();
 
             var invocationMock = new Mock<Castle.DynamicProxy.IInvocation>();
 
@@ -23,7 +23,7 @@ namespace pattern.strategy.test.Tests.Validation
             invocationMock.SetupGet(o => o.Arguments)
                 .Returns(new object[] { new Request() });
 
-            validatorInterceptor.InterceptAsynchronous(invocationMock.Object);
+            interceptor.InterceptAsynchronous(invocationMock.Object);
 
             //Assert.True(validatorInterceptor.ValidationFailures.Any());
         }
@@ -31,7 +31,7 @@ namespace pattern.strategy.test.Tests.Validation
         [Fact]
         public void ValidateAsyncIsValidRequestTest()
         {
-            var validatorInterceptor = new TestInterceptorAttribute();
+            var interceptor = new TestInterceptorAttribute();
 
             var invocationMock = new Mock<Castle.DynamicProxy.IInvocation>();
 
@@ -53,9 +53,7 @@ namespace pattern.strategy.test.Tests.Validation
             invocationMock.Setup(o => o.CaptureProceedInfo())
                 .Returns(proceedInfo.Object);
 
-            validatorInterceptor.InterceptAsynchronous(invocationMock.Object);
-
-            //Assert.False(validatorInterceptor.ValidationFailures.Any());
+            interceptor.InterceptAsynchronous(invocationMock.Object);
         }
     }
 }

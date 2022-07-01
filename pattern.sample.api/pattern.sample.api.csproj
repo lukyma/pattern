@@ -16,5 +16,9 @@
     <ProjectReference Include="..\pattern.strategy\pattern.strategy.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Helper\" />
+  </ItemGroup>
+
 
 </Project>
