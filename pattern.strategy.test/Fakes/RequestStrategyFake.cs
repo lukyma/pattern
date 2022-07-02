@@ -11,7 +11,7 @@ namespace pattern.strategy.test.Fakes
         [TestInterceptor]
         public async Task<Response> HandleAsync(Request request, CancellationToken cancellationToken)
         {
-            return new Response();
+            return await Task.FromResult(new Response());
         }
     }
 
