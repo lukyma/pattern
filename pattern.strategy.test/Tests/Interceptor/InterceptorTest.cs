@@ -92,5 +92,20 @@ namespace pattern.strategy.test.Tests.Validation
             Assert.Throws<NotImplementedException>(() => proxy.SyncInterceptorVoidException());
             //await proxy.AsyncInterceptorVoid();
         }
+
+        [Fact]
+        public async Task AsyncException()
+        {
+            var serviceColletion = new ServiceCollection();
+
+            serviceColletion.AddScopedProxyInterceptor<ITestClassMethodInterceptor, TestClassMethodInterceptor>();
+
+            var serviceProvider = serviceColletion.BuildServiceProvider();
+
+            var proxy = serviceProvider.GetRequiredService<ITestClassMethodInterceptor>();
+
+            await Assert.ThrowsAsync<NotImplementedException>(async () => await proxy.AsyncInterceptorVoidException());
+            //await proxy.AsyncInterceptorVoid();
+        }
     }
 }
