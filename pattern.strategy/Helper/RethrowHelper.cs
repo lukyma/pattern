@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace patterns.strategy
 {
-    internal static class RethrowHelper
+    public static class RethrowHelper
     {
         public static void Rethrow(this Exception? exception)
         {
