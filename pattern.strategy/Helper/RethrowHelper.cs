@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 
 namespace patterns.strategy
 {
+    [ExcludeFromCodeCoverage]
     public static class RethrowHelper
     {
         public static void Rethrow(this Exception? exception)
