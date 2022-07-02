@@ -23,7 +23,8 @@ steps:
     /o:lucasmachado \
     /k:9D915261-4352-490A-858E-0D73D6BAFBE4 \
     /d:sonar.coverageReportPaths=../TestResults/SonarQube.xml \
-    /d:sonar.host.url=https://sonarcloud.io
+    /d:sonar.host.url=https://sonarcloud.io \
+    /d:sonar.coverage.exclusions="**Test*.cs"
   displayName: "Sonar Begin"
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'Dotnet Build'
