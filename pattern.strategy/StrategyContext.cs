@@ -6,7 +6,7 @@ namespace patterns.strategy
 {
     public class StrategyContext : IStrategyContext
     {
-        private IServiceProvider ServiceProvider;
+        private IServiceProvider ServiceProvider { get; }
         public StrategyContext(IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
