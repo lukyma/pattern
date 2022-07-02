@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace patterns.strategy
 {
     [ExcludeFromCodeCoverage]
-    public static class RethrowHelper
+    internal static class RethrowHelper
     {
         public static void Rethrow(this Exception? exception)
         {
