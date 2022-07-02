@@ -18,14 +18,12 @@ namespace patterns.strategy
             if (exception == null)
                 throw new ArgumentNullException(nameof(exception));
 
-            switch (exception)
+            if (exception is AggregateException aggregate)
             {
-                case AggregateException aggregate:
-                    Rethrow(aggregate.InnerException);
-                    break;
-                default:
-                    Rethrow(exception);
-                    break;
+                Rethrow(aggregate.InnerException);
+            }
+            else {
+                Rethrow(exception);
             }
         }
         public static void RethrowIfFaulted(this Task task)
