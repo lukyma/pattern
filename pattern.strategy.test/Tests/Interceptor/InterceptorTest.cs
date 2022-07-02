@@ -74,7 +74,7 @@ namespace pattern.strategy.test.Tests.Validation
             var proxy = serviceProvider.GetRequiredService<ITestClassMethodInterceptor>();
 
             proxy.SyncInterceptorVoid();
-            Assert.Equal(1, proxy.SyncInterceptorResult());
+            Assert.Equal(1, await Task.FromResult(proxy.SyncInterceptorResult()));
             //await proxy.AsyncInterceptorVoid();
         }
 
