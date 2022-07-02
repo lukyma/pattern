@@ -9,6 +9,7 @@ namespace pattern.strategy.test.Fakes
         Task<int> AsyncInterceptorResult();
         void SyncInterceptorVoid();
         int SyncInterceptorResult();
+        void SyncInterceptorVoidException();
     }
     public class TestClassMethodInterceptor : ITestClassMethodInterceptor
     {
@@ -33,6 +34,11 @@ namespace pattern.strategy.test.Fakes
         public int SyncInterceptorResult()
         {
             return 1;
+        }
+
+        public void SyncInterceptorVoidException()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

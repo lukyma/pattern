@@ -77,5 +77,20 @@ namespace pattern.strategy.test.Tests.Validation
             proxy.SyncInterceptorResult();
             //await proxy.AsyncInterceptorVoid();
         }
+
+        [Fact]
+        public void SyncException()
+        {
+            var serviceColletion = new ServiceCollection();
+
+            serviceColletion.AddScopedProxyInterceptor<ITestClassMethodInterceptor, TestClassMethodInterceptor>();
+
+            var serviceProvider = serviceColletion.BuildServiceProvider();
+
+            var proxy = serviceProvider.GetRequiredService<ITestClassMethodInterceptor>();
+
+            Assert.Throws<NotImplementedException>(() => proxy.SyncInterceptorVoidException());
+            //await proxy.AsyncInterceptorVoid();
+        }
     }
 }
