@@ -17,13 +17,13 @@ namespace pattern.strategy.test.Fakes
         [TestInterceptor]
         public virtual async Task AsyncInterceptorVoid()
         {
-
+            await Task.CompletedTask;
         }
 
         [TestInterceptor]
         public virtual async Task<int> AsyncInterceptorResult()
         {
-            return 1;
+            return await Task.FromResult(1);
         }
 
         [TestInterceptor]

@@ -143,7 +143,6 @@ namespace patterns.strategy
                         interceptor.Order = item2.Order;
                         interceptor.TypeClass = typeof(TImplementation).Name;
                         interceptor.Interceptor = item2;
-                        var teste = item.GetType();
                         asyncInterceptors.Add(interceptor);
                     }
                 }

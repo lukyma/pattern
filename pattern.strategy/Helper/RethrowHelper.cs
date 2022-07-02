@@ -8,14 +8,14 @@ namespace patterns.strategy
     [ExcludeFromCodeCoverage]
     internal static class RethrowHelper
     {
-        public static void Rethrow(this Exception? exception)
+        public static void Rethrow(this Exception exception)
         {
             if (exception == null)
                 throw new ArgumentNullException(nameof(exception));
 
             ExceptionDispatchInfo.Capture(exception).Throw();
         }
-        public static void RethrowInnerIfAggregate(this Exception? exception)
+        public static void RethrowInnerIfAggregate(this Exception exception)
         {
             if (exception == null)
                 throw new ArgumentNullException(nameof(exception));
