@@ -105,7 +105,6 @@ namespace pattern.strategy.test.Tests.Validation
             var proxy = serviceProvider.GetRequiredService<ITestClassMethodInterceptor>();
 
             await Assert.ThrowsAsync<NotImplementedException>(async () => await proxy.AsyncInterceptorVoidException());
-            //await proxy.AsyncInterceptorVoid();
         }
     }
 }
