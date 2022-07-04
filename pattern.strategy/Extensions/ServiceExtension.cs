@@ -138,12 +138,30 @@ namespace patterns.strategy
                     foreach (var item2 in interceptorAttributes)
                     {
                         item2.ServiceProvider = sp;
-                        AsyncInterceptorBaseAttribute interceptor = Activator.CreateInstance<AsyncInterceptorBaseAttribute>();
-                        interceptor.MethodName = nameMethod;
-                        interceptor.Order = item2.Order;
-                        interceptor.TypeClass = typeof(TImplementation).Name;
-                        interceptor.Interceptor = item2;
-                        asyncInterceptors.Add(interceptor);
+                        var interceptor = (AsyncInterceptorBaseAttribute)asyncInterceptors.FirstOrDefault(o => ((AsyncInterceptorBaseAttribute)o).InterceptorAttributeName == item2.GetType().Name);
+                        if (interceptor == null)
+                        {
+                            interceptor = Activator.CreateInstance<AsyncInterceptorBaseAttribute>();
+                            interceptor.InterceptorAttributeName = item2.GetType().Name;
+                            interceptor.InterceptorInfos.Add(new InterceptorInfo
+                            {
+                                Interceptor = item2,
+                                MethodName = string.Join('|', item.GetParameters().Select(o => o.Name)) + nameMethod,
+                                Order = item2.Order,
+                                TypeClass = typeof(TImplementation).Name
+                            });
+                            asyncInterceptors.Add(interceptor);
+                        }
+                        else
+                        {
+                            interceptor.InterceptorInfos.Add(new InterceptorInfo
+                            {
+                                Interceptor = item2,
+                                MethodName = string.Join('|', item.GetParameters().Select(o => o.Name)) + nameMethod,
+                                Order = item2.Order,
+                                TypeClass = typeof(TImplementation).Name
+                            });
+                        }
                     }
                 }
 

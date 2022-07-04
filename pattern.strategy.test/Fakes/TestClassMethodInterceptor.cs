@@ -8,9 +8,11 @@ namespace pattern.strategy.test.Fakes
         Task AsyncInterceptorVoid();
         Task<int> AsyncInterceptorResult();
         void SyncInterceptorVoid();
+        void SyncInterceptorVoid(int teste);
         int SyncInterceptorResult();
         void SyncInterceptorVoidException();
         Task AsyncInterceptorVoidException();
+        Task AsyncWithoutInterceptorVoidException();
     }
     public class TestClassMethodInterceptor : ITestClassMethodInterceptor
     {
@@ -27,7 +29,13 @@ namespace pattern.strategy.test.Fakes
         }
 
         [TestInterceptor]
+        [TestInterceptor2(Order = 1)]
         public void SyncInterceptorVoid()
+        {
+        }
+
+        [TestInterceptor2(Order = 1)]
+        public void SyncInterceptorVoid(int teste)
         {
         }
 
@@ -43,6 +51,11 @@ namespace pattern.strategy.test.Fakes
         }
 
         public Task AsyncInterceptorVoidException()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task AsyncWithoutInterceptorVoidException()
         {
             throw new System.NotImplementedException();
         }

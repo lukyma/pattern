@@ -2,6 +2,7 @@
 using patterns.strategy;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace pattern.strategy
     /// </summary>
     public abstract class InterceptorAttribute : AsyncInterceptorBaseAttribute
     {
+        public int Order { get; set; }
         internal override Task InterceptAsync(
             IInvocation invocation,
             IInvocationProceedInfo proceedInfo,
@@ -32,6 +34,14 @@ namespace pattern.strategy
         protected abstract Task<TResult> HandleInterceptAsync<TResult>(IInvocation invocation, Func<Task<TResult>> proceed);
     }
 
+    public class InterceptorInfo
+    {
+        public int Order { get; set; }
+        internal AsyncInterceptorBaseAttribute Interceptor { get; set; }
+        internal string TypeClass { get; set; }
+        internal string MethodName { get; set; }
+    }
+
     /// <summary>
     /// Base attribute responsible for implementing the functions of the DynamicProxy interceptor. 
     /// Note: must not be used as an interceptor attribute. Please use InterceptorAttribute. 
@@ -42,11 +52,11 @@ namespace pattern.strategy
         public AsyncInterceptorBaseAttribute()
         {
         }
-        public int Order { get; set; }
-        internal AsyncInterceptorBaseAttribute Interceptor { get; set; }
-        internal string TypeClass { get; set; }
-        internal string MethodName { get; set; }
+
+        public List<InterceptorInfo> InterceptorInfos { get; set; } = new List<InterceptorInfo>();
+
         internal IServiceProvider ServiceProvider { get; set; }
+        public string InterceptorAttributeName { get; set; }
         /// <summary>
         /// Returns the instance that is registered in the ServiceProvider.
         /// </summary>
@@ -113,11 +123,17 @@ namespace pattern.strategy
         {
             if (invocation.MethodInvocationTarget
                 .GetCustomAttributes(false)
-                .Any(p => p.GetType().IsSubclassOf(typeof(AsyncInterceptorBaseAttribute)) &&
-                          p.GetType() == Interceptor.GetType()) &&
-                MethodName == invocation.MethodInvocationTarget.Name)
+                .Any(p => p.GetType().IsSubclassOf(typeof(InterceptorAttribute))))
             {
-                return Interceptor.InterceptAsync(invocation, proceedInfo, proceed);
+                var parameters = string.Join('|', invocation.MethodInvocationTarget.GetParameters().Select(o => o.Name));
+
+                var interceptorInfo = InterceptorInfos
+                    .OrderBy(o => o.Order)
+                    .FirstOrDefault(o => o.MethodName == parameters + invocation.MethodInvocationTarget.Name);
+                if (interceptorInfo != null)
+                {
+                    return interceptorInfo.Interceptor.InterceptAsync(invocation, proceedInfo, proceed);
+                }
             }
             return proceed(invocation, proceedInfo);
         }
@@ -137,10 +153,17 @@ namespace pattern.strategy
         {
             if (invocation.MethodInvocationTarget
                 .GetCustomAttributes(false)
-                .Any(p => p.GetType().IsSubclassOf(typeof(AsyncInterceptorBaseAttribute)) &&
-                          p.GetType() == Interceptor.GetType()) && MethodName == invocation.MethodInvocationTarget.Name)
+                .Any(p => p.GetType().IsSubclassOf(typeof(InterceptorAttribute))))
             {
-                return Interceptor.InterceptAsync(invocation, proceedInfo, proceed);
+                var parameters = string.Join('|', invocation.MethodInvocationTarget.GetParameters().Select(o => o.Name));
+
+                var interceptorInfo = InterceptorInfos
+                    .OrderBy(o => o.Order)
+                    .FirstOrDefault(o => o.MethodName == parameters + invocation.MethodInvocationTarget.Name);
+                if (interceptorInfo != null)
+                {
+                    return interceptorInfo.Interceptor.InterceptAsync(invocation, proceedInfo, proceed);
+                }
             }
             return proceed(invocation, proceedInfo);
         }

@@ -74,8 +74,8 @@ namespace pattern.strategy.test.Tests.Validation
             var proxy = serviceProvider.GetRequiredService<ITestClassMethodInterceptor>();
 
             proxy.SyncInterceptorVoid();
+            proxy.SyncInterceptorVoid(1);
             Assert.Equal(1, await Task.FromResult(proxy.SyncInterceptorResult()));
-            //await proxy.AsyncInterceptorVoid();
         }
 
         [Fact]
@@ -90,7 +90,6 @@ namespace pattern.strategy.test.Tests.Validation
             var proxy = serviceProvider.GetRequiredService<ITestClassMethodInterceptor>();
 
             Assert.Throws<NotImplementedException>(() => proxy.SyncInterceptorVoidException());
-            //await proxy.AsyncInterceptorVoid();
         }
 
         [Fact]
@@ -105,6 +104,20 @@ namespace pattern.strategy.test.Tests.Validation
             var proxy = serviceProvider.GetRequiredService<ITestClassMethodInterceptor>();
 
             await Assert.ThrowsAsync<NotImplementedException>(async () => await proxy.AsyncInterceptorVoidException());
+        }
+
+        [Fact]
+        public async Task AsyncWithoutInterceptorVoidException()
+        {
+            var serviceColletion = new ServiceCollection();
+
+            serviceColletion.AddScopedProxyInterceptor<ITestClassMethodInterceptor, TestClassMethodInterceptor>();
+
+            var serviceProvider = serviceColletion.BuildServiceProvider();
+
+            var proxy = serviceProvider.GetRequiredService<ITestClassMethodInterceptor>();
+
+            await Assert.ThrowsAsync<NotImplementedException>(async () => await proxy.AsyncWithoutInterceptorVoidException());
         }
     }
 }
