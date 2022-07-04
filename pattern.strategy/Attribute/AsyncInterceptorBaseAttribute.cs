@@ -122,17 +122,16 @@ namespace pattern.strategy
             Func<IInvocation, IInvocationProceedInfo, Task> proceed)
         {
             if (invocation.MethodInvocationTarget
-                .GetCustomAttributes(false)
-                .Any(p => p.GetType().IsSubclassOf(typeof(InterceptorAttribute))))
+                .GetCustomAttributes(false).Any(p => p.GetType().IsSubclassOf(typeof(InterceptorAttribute))))
             {
                 var parameters = string.Join('|', invocation.MethodInvocationTarget.GetParameters().Select(o => o.Name));
 
                 var interceptorInfo = InterceptorInfos
-                    .OrderBy(o => o.Order)
-                    .FirstOrDefault(o => o.MethodName == parameters + invocation.MethodInvocationTarget.Name);
+                    .OrderBy(o => o.Order).FirstOrDefault(o => o.MethodName == parameters + invocation.MethodInvocationTarget.Name);
                 if (interceptorInfo != null)
                 {
-                    return interceptorInfo.Interceptor.InterceptAsync(invocation, proceedInfo, proceed);
+                    return interceptorInfo.Interceptor
+                        .InterceptAsync(invocation, proceedInfo, proceed);
                 }
             }
             return proceed(invocation, proceedInfo);
