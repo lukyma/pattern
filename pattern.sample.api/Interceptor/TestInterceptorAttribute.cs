@@ -1,5 +1,6 @@
 ﻿using Castle.DynamicProxy;
 using FluentValidation;
+using pattern.sample.api.Service;
 using pattern.sample.api.StrategyHandler.Validator;
 using pattern.strategy;
 using System;
@@ -11,12 +12,10 @@ namespace pattern.sample.api.Interceptor
     public class TestInterceptorAttribute : InterceptorAttribute, IAsyncInterceptor
     {
         public string TypeTest { get; set; }
-        public TestInterceptorAttribute()
-        {
-        }
 
         protected override async Task<TResult> HandleInterceptAsync<TResult>(IInvocation invocation, Func<Task<TResult>> result)
         {
+            var teste = GetService<ITestService>();
             var response = await result();
             return response;
         }

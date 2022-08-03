@@ -64,7 +64,11 @@ namespace pattern.strategy
         /// <returns></returns>
         protected T GetService<T>()
         {
-            return (T)ServiceProvider.GetService(typeof(T));
+            return (T)ServiceProvider?.GetService(typeof(T));
+        }
+        protected object GetService(Type type)
+        {
+            return ServiceProvider?.GetService(type);
         }
         private static readonly MethodInfo InterceptSynchronousMethodInfo =
             typeof(AsyncInterceptorBaseAttribute).GetMethod(
