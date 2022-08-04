@@ -19,19 +19,11 @@ Patterns aplicados ao asp.net core.
 1 - Create Custom intercept attribute inheriting from ```InterceptorAttribute```
 
 ```
-    public class TestInterceptorAttribute : InterceptorAttribute, IAsyncInterceptor
+    public class TestInterceptorAttribute : InterceptorAttribute
     {
-        public TestInterceptorAttribute()
+        protected override async Task<TResult> HandleInterceptAsync<TResult>(IInvocation invocation, Func<Task<TResult>> result)
         {
-        }
-        protected override Task InterceptAsync(IInvocation invocation, IInvocationProceedInfo proceedInfo, Func<IInvocation, IInvocationProceedInfo, Task> proceed)
-        {
-            return proceed(invocation, proceedInfo);
-        }
-
-        protected override async Task<TResult> InterceptAsync<TResult>(IInvocation invocation, IInvocationProceedInfo proceedInfo, Func<IInvocation, IInvocationProceedInfo, Task<TResult>> proceed)
-        {
-            return await proceed(invocation, proceedInfo);
+            return await result();
         }
     }
 ```
@@ -60,10 +52,10 @@ Patterns aplicados ao asp.net core.
 
 ```
 
-3 - Include in ServiceCollection with DependencyIncection
+3 - Include in ServiceCollection with DependencyIncection with true parameter
 
 ```
-services.AddScopedProxyInterceptor<ITestService, TestService>();
+services.AddScoppedStrategy<ITestService, TestService>(true);
 ```
 Or with a different life cycle, according to your need.
 
