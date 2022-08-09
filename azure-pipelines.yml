@@ -64,10 +64,10 @@ stages:
               --configuration $(buildConfiguration)
               dotnet nuget push $(System.DefaultWorkingDirectory)/package/Pattern.$(packageVersion).nupkg \
               --source https://api.nuget.org/v3/index.json \
-              --api-key $(NUGET_TOKEN)
+              --api-key $(TOKEN_NUGET)
             displayName: Package
             env:
-              NUGET_TOKEN: $(TOKEN_NUGET)
+              TOKEN_NUGET: $(TOKEN_NUGET)
               
 # steps:
 # #- script: |
