@@ -33,7 +33,12 @@ stages:
           displayName: "Sonar Begin"
         - script: dotnet build --configuration $(buildConfiguration)
           displayName: 'Dotnet Build'
-        - script: ls $(System.DefaultWorkingDirectory)/pattern.strategy
+        - script: | 
+           ls $(System.DefaultWorkingDirectory)/pattern.strategy
+           echo $(NUGET_TOKEN)
+        
+          env:
+            NUGET_TOKEN: $(TOKEN_NUGET)
           displayName: "Test"
         - script: dotnet test --logger trx --results-directory ../TestResults/ --collect:"XPlat Code Coverage" --no-restore -m:1
           displayName: 'Dotnet Test'
