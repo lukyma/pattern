@@ -48,7 +48,7 @@ stages:
     jobs:
       - job: 
         steps:
-          - script: ls $(Build.ArtifactStagingDirectory)
+          - script: ls $(System.DefaultWorkingDirectory)
 # steps:
 # #- script: |
 # #    export SONAR_TOKEN=$(SONAR_TOKEN)
