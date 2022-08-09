@@ -21,6 +21,8 @@ stages:
         #- script: |
         #    export SONAR_TOKEN=$(SONAR_TOKEN)
         #  displayName: 'Sonar Token'
+        - script: ls $(System.DefaultWorkingDirectory)/pattern.strategy
+          displayName: "Test"
         - script: |
             dotnet tool install --global dotnet-sonarscanner --version 5.7.1
             dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.1.9
@@ -48,7 +50,7 @@ stages:
     jobs:
       - job: 
         steps:
-          - script: ls $(System.DefaultWorkingDirectory)
+          - script: ls $(System.DefaultWorkingDirectory)/pattern.strategy
 # steps:
 # #- script: |
 # #    export SONAR_TOKEN=$(SONAR_TOKEN)
