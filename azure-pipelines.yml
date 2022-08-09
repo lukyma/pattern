@@ -56,6 +56,8 @@ stages:
     jobs:
       - job: 
         steps:
+          - script: dotnet build --configuration $(buildConfiguration)
+            displayName: "Build"
           - script: |
               dotnet pack $(System.DefaultWorkingDirectory)/pattern.strategy/pattern.strategy.csproj \
               -p:PackageVersion=$(packageVersion) \
@@ -64,6 +66,7 @@ stages:
               dotnet nuget push $(System.DefaultWorkingDirectory)/package/Pattern.$(packageVersion).nupkg \
               --source https://api.nuget.org/v3/index.json \
               --api-key $(NUGET_TOKEN)
+            displayName: Package
             env:
               NUGET_TOKEN: $(TOKEN_NUGET)
               
