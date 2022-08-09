@@ -37,7 +37,6 @@ stages:
         - script: | 
            ls $(System.DefaultWorkingDirectory)/pattern.strategy
            echo $(NUGET_TOKEN)
-        
           env:
             NUGET_TOKEN: $(TOKEN_NUGET)
           displayName: "Test"
