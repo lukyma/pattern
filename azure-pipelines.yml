@@ -50,7 +50,7 @@ stages:
     jobs:
       - job: 
         steps:
-          - script: echo $env:TOKEN_NUGET
+          - script: echo $(TOKEN_NUGET)
             env:
               TOKEN_NUGET: $(TOKEN_NUGET)
               
