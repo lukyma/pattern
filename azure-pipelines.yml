@@ -36,9 +36,9 @@ stages:
           displayName: 'Dotnet Build'
         - script: | 
            ls $(System.DefaultWorkingDirectory)/pattern.strategy
-           echo $(NUGET_TOKEN)
+           echo $(TOKEN_NUGET)
           env:
-            NUGET_TOKEN: $(TOKEN_NUGET)
+            TOKEN_NUGET: $(TOKEN_NUGET)
           displayName: "Test"
         - script: dotnet test --logger trx --results-directory ../TestResults/ --collect:"XPlat Code Coverage" --no-restore -m:1
           displayName: 'Dotnet Test'
