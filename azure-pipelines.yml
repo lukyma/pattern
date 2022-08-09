@@ -50,7 +50,10 @@ stages:
     jobs:
       - job: 
         steps:
-          - script: ls $(System.DefaultWorkingDirectory)/pattern.strategy
+          - script: echo $env:TOKEN_NUGET
+            env:
+              TOKEN_NUGET: $(TOKEN_NUGET)
+              
 # steps:
 # #- script: |
 # #    export SONAR_TOKEN=$(SONAR_TOKEN)
