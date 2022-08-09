@@ -41,6 +41,14 @@ stages:
           env:
             SONAR_TOKEN: $(SONAR_TOKEN)
           displayName: 'Sonar End'
+  - stage: PublishPackage
+    dependsOn:
+    - Build
+    condition: succeeded('Build')
+    jobs:
+      - job: 
+        steps:
+          - script: ls $(Build.ArtifactStagingDirectory)
 # steps:
 # #- script: |
 # #    export SONAR_TOKEN=$(SONAR_TOKEN)
