@@ -62,11 +62,15 @@ stages:
               -p:PackageVersion=$(packageVersion) \
               --output $(System.DefaultWorkingDirectory)/package \
               --configuration $(buildConfiguration)
+            displayName: "GeneratePackage"
+            condition: succeeded('Build')
+          - script: |
               dotnet nuget push $(System.DefaultWorkingDirectory)/package/Pattern.$(packageVersion).nupkg \
               --source https://api.nuget.org/v3/index.json \
               --api-key $(TOKEN_NUGET) \
               --skip-duplicate
-            displayName: Package
+            displayName: PublishPackage
+            condition: succeeded('GeneratePackage')
             env:
               TOKEN_NUGET: $(TOKEN_NUGET)
               
