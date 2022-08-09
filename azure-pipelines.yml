@@ -21,8 +21,6 @@ stages:
         #- script: |
         #    export SONAR_TOKEN=$(SONAR_TOKEN)
         #  displayName: 'Sonar Token'
-        - script: ls $(System.DefaultWorkingDirectory)/pattern.strategy
-          displayName: "Test"
         - script: |
             dotnet tool install --global dotnet-sonarscanner --version 5.7.1
             dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.1.9
@@ -35,6 +33,8 @@ stages:
           displayName: "Sonar Begin"
         - script: dotnet build --configuration $(buildConfiguration)
           displayName: 'Dotnet Build'
+        - script: ls $(System.DefaultWorkingDirectory)/pattern.strategy
+          displayName: "Test"
         - script: dotnet test --logger trx --results-directory ../TestResults/ --collect:"XPlat Code Coverage" --no-restore -m:1
           displayName: 'Dotnet Test'
         - script: reportgenerator -reporttypes:"SonarQube" -reports:"../TestResults/**/*.cobertura.xml" -targetdir:"../TestResults/"
