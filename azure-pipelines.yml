@@ -36,7 +36,7 @@ stages:
           displayName: 'Dotnet Build'
         - script: | 
            ls $(System.DefaultWorkingDirectory)/pattern.strategy
-           echo $(TOKEN_NUGET)
+           echo $(TOKEN_NUGET) $TOKEN_NUGET
           env:
             TOKEN_NUGET: $(TOKEN_NUGET)
           displayName: "Test"
