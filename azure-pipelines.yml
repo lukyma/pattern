@@ -11,6 +11,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  packageVersion: 2.4.0
 
 
 stages:
@@ -55,9 +56,16 @@ stages:
     jobs:
       - job: 
         steps:
-          - script: echo $(TOKEN_NUGET)
+          - script: |
+              dotnet pack $(System.DefaultWorkingDirectory)/pattern.strategy/pattern.strategy.csproj \
+              -p:PackageVersion=$(packageVersion) \
+              --output $(System.DefaultWorkingDirectory)/package \
+              --configuration $(buildConfiguration)
+              dotnet nuget push $(System.DefaultWorkingDirectory)/package/Pattern.$(packageVersion).nupkg \
+              --source https://api.nuget.org/v3/index.json \
+              --api-key $(NUGET_TOKEN)
             env:
-              TOKEN_NUGET: $(TOKEN_NUGET)
+              NUGET_TOKEN: $(TOKEN_NUGET)
               
 # steps:
 # #- script: |
