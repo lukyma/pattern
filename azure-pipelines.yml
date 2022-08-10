@@ -12,8 +12,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
   packageVersion: 2.4.0
-
-
+  
 stages:
   - stage: Build
     jobs:
@@ -55,7 +54,9 @@ stages:
     jobs:
       - job: 
         steps:
-          - script: dotnet build --configuration $(buildConfiguration)
+          - script: | 
+              dotnet build $(System.DefaultWorkingDirectory)/pattern.strategy/pattern.strategy.csproj \
+              --configuration $(buildConfiguration)
             displayName: "Build"
           - script: |
               dotnet pack $(System.DefaultWorkingDirectory)/pattern.strategy/pattern.strategy.csproj \
