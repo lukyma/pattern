@@ -12,7 +12,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
   packageVersion: 2.4.0
-  
+
 stages:
   - stage: Build
     jobs:
@@ -31,14 +31,9 @@ stages:
             /d:sonar.host.url=https://sonarcloud.io \
             /d:sonar.coverage.exclusions="**Test*.cs"
           displayName: "Sonar Begin"
-        - script: dotnet build --configuration $(buildConfiguration)
-          displayName: 'Dotnet Build'
         - script: | 
-           ls $(System.DefaultWorkingDirectory)/pattern.strategy
-           echo $(TOKEN_NUGET) $TOKEN_NUGET
-          env:
-            TOKEN_NUGET: $(TOKEN_NUGET)
-          displayName: "Test"
+            dotnet build $(System.DefaultWorkingDirectory)/pattern.strategy/pattern.strategy.csproj \
+            --configuration $(buildConfiguration)
         - script: dotnet test --logger trx --results-directory ../TestResults/ --collect:"XPlat Code Coverage" --no-restore -m:1
           displayName: 'Dotnet Test'
         - script: reportgenerator -reporttypes:"SonarQube" -reports:"../TestResults/**/*.cobertura.xml" -targetdir:"../TestResults/"
