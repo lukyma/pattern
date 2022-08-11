@@ -14,7 +14,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pattern.strategy.test", "pattern.strategy.test\pattern.strategy.test.csproj", "{C5955569-F26D-4563-95A3-56EB9C4C822E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pattern.benchmark", "pattern.benchmark\pattern.benchmark.csproj", "{5932724A-708C-4CBF-8C02-FAED126410B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pattern.benchmark", "pattern.benchmark\pattern.benchmark.csproj", "{5932724A-708C-4CBF-8C02-FAED126410B4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{4751AE8F-518D-4C2D-9287-F5E3F7F3D5FF}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
