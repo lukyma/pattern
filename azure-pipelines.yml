@@ -18,9 +18,6 @@ stages:
     jobs:
       - job: "BuildAndPublishSonar"
         steps:
-        #- script: |
-        #    export SONAR_TOKEN=$(SONAR_TOKEN)
-        #  displayName: 'Sonar Token'
         - script: |
             dotnet tool install --global dotnet-sonarscanner --version 5.7.1
             dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.1.9
@@ -72,30 +69,5 @@ stages:
             condition: succeeded()
             env:
               TOKEN_NUGET: $(TOKEN_NUGET)
-              
-# steps:
-# #- script: |
-# #    export SONAR_TOKEN=$(SONAR_TOKEN)
-# #  displayName: 'Sonar Token'
-# - script: |
-#     dotnet tool install --global dotnet-sonarscanner --version 5.7.1
-#     dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.1.9
-#     dotnet sonarscanner begin \
-#     /o:lucasmachado \
-#     /k:9D915261-4352-490A-858E-0D73D6BAFBE4 \
-#     /d:sonar.coverageReportPaths=../TestResults/SonarQube.xml \
-#     /d:sonar.host.url=https://sonarcloud.io \
-#     /d:sonar.coverage.exclusions="**Test*.cs"
-#   displayName: "Sonar Begin"
-# - script: dotnet build --configuration $(buildConfiguration)
-#   displayName: 'Dotnet Build'
-# - script: dotnet test --logger trx --results-directory ../TestResults/ --collect:"XPlat Code Coverage" --no-restore -m:1
-#   displayName: 'Dotnet Test'
-# - script: reportgenerator -reporttypes:"SonarQube" -reports:"../TestResults/**/*.cobertura.xml" -targetdir:"../TestResults/"
-#   displayName: 'Report Generator'
-# - script: dotnet sonarscanner end
-#   env:
-#     SONAR_TOKEN: $(SONAR_TOKEN)
-#   displayName: 'Sonar End'
 
 
