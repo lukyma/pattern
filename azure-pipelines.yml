@@ -39,9 +39,9 @@ stages:
             /d:sonar.coverage.exclusions="**Test*.cs"
           displayName: "Sonar Begin"
         - script: | 
-            dotnet build $(System.DefaultWorkingDirectory)/pattern.strategy/pattern.strategy.csproj \
+            dotnet build $(System.DefaultWorkingDirectory)/pattern/pattern.strategy/pattern.strategy.csproj \
             --configuration $(buildConfiguration)
-            dotnet build $(System.DefaultWorkingDirectory)/pattern.strategy.test/pattern.strategy.test.csproj \
+            dotnet build $(System.DefaultWorkingDirectory)/pattern/pattern.strategy.test/pattern.strategy.test.csproj \
             --configuration $(buildConfiguration)
           displayName: "Dotnet Build"
         - script: dotnet test --logger trx --results-directory ../TestResults/ --collect:"XPlat Code Coverage" --no-restore -m:1
@@ -60,18 +60,18 @@ stages:
       - job: 
         steps:
           - script: | 
-              dotnet build $(System.DefaultWorkingDirectory)/pattern.strategy/pattern.strategy.csproj \
+              dotnet build $(System.DefaultWorkingDirectory)/pattern/pattern.strategy/pattern.strategy.csproj \
               --configuration $(buildConfiguration)
             displayName: "Dotnet Build"
           - script: |
-              dotnet pack $(System.DefaultWorkingDirectory)/pattern.strategy/pattern.strategy.csproj \
+              dotnet pack $(System.DefaultWorkingDirectory)/pattern/pattern.strategy/pattern.strategy.csproj \
               -p:PackageVersion=$(packageVersion) \
               --output $(System.DefaultWorkingDirectory)/package \
               --configuration $(buildConfiguration)
             displayName: "GeneratePackage"
             condition: succeeded()
           - script: |
-              dotnet nuget push $(System.DefaultWorkingDirectory)/package/Pattern.$(packageVersion).nupkg \
+              dotnet nuget push $(System.DefaultWorkingDirectory)/pattern/package/Pattern.$(packageVersion).nupkg \
               --source https://api.nuget.org/v3/index.json \
               --api-key $(TOKEN_NUGET) \
               --skip-duplicate
