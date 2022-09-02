@@ -13,11 +13,21 @@ variables:
   buildConfiguration: 'Release'
   packageVersion: 2.4.0
 
+
+resources:
+  repositories:
+    - repository: deploy
+      type: git
+      source: deploy.k8s.repo
+
 stages:
   - stage: Build
     jobs:
       - job: "BuildAndPublishSonar"
         steps:
+        - checkout: self
+        - checkout: deploy
+        - script: ls $(Build.SourcesDirectory)
         - script: |
             dotnet tool install --global dotnet-sonarscanner --version 5.7.1
             dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.1.9
