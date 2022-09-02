@@ -18,8 +18,7 @@ resources:
   repositories:
     - repository: deploy
       type: git
-      source: MyTests/deploy.k8s.repo
-      name: deploy
+      name: MyTests/deploy.k8s.repo
 
 stages:
   - stage: Build
