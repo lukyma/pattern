@@ -45,9 +45,9 @@ stages:
             dotnet build $(System.DefaultWorkingDirectory)/pattern/pattern.strategy.test/pattern.strategy.test.csproj \
             --configuration $(buildConfiguration)
           displayName: "Dotnet Build"
-        - script: dotnet test $(System.DefaultWorkingDirectory)/pattern --logger trx --results-directory $(repoTestResults)/TestResults/ --collect:"XPlat Code Coverage" --no-restore -m:1
+        - script: dotnet test $(System.DefaultWorkingDirectory)/pattern --logger trx --results-directory $(repoTestResults)/ --collect:"XPlat Code Coverage" --no-restore -m:1
           displayName: 'Dotnet Test'
-        - script: reportgenerator -reporttypes:"SonarQube" -reports:"$(repoTestResults)/TestResults/**/*.cobertura.xml" -targetdir:"$(repoTestResults)/TestResults/"
+        - script: reportgenerator -reporttypes:"SonarQube" -reports:"$(repoTestResults)/**/*.cobertura.xml" -targetdir:"$(repoTestResults)/"
           displayName: 'Report Generator'
         - script: dotnet sonarscanner end
           env:
