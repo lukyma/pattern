@@ -12,6 +12,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
   packageVersion: 2.4.0
+  repoTestResults: $(System.DefaultWorkingDirectory)/pattern/TestResults
 
 
 resources:
@@ -34,7 +35,7 @@ stages:
             dotnet sonarscanner begin \
             /o:lucasmachado \
             /k:9D915261-4352-490A-858E-0D73D6BAFBE4 \
-            /d:sonar.coverageReportPaths=../TestResults/SonarQube.xml \
+            /d:sonar.coverageReportPaths=$(repoTestResults)/SonarQube.xml \
             /d:sonar.host.url=https://sonarcloud.io \
             /d:sonar.coverage.exclusions="**Test*.cs"
           displayName: "Sonar Begin"
@@ -44,9 +45,9 @@ stages:
             dotnet build $(System.DefaultWorkingDirectory)/pattern/pattern.strategy.test/pattern.strategy.test.csproj \
             --configuration $(buildConfiguration)
           displayName: "Dotnet Build"
-        - script: dotnet test $(System.DefaultWorkingDirectory)/pattern --logger trx --results-directory ../TestResults/ --collect:"XPlat Code Coverage" --no-restore -m:1
+        - script: dotnet test $(System.DefaultWorkingDirectory)/pattern --logger trx --results-directory $(repoTestResults)/TestResults/ --collect:"XPlat Code Coverage" --no-restore -m:1
           displayName: 'Dotnet Test'
-        - script: reportgenerator -reporttypes:"SonarQube" -reports:"../TestResults/**/*.cobertura.xml" -targetdir:"../TestResults/"
+        - script: reportgenerator -reporttypes:"SonarQube" -reports:"$(repoTestResults)/TestResults/**/*.cobertura.xml" -targetdir:"$(repoTestResults)/TestResults/"
           displayName: 'Report Generator'
         - script: dotnet sonarscanner end
           env:
