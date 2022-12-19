@@ -1,4 +1,5 @@
-﻿using Castle.DynamicProxy;
+﻿using AspectCore.DynamicProxy;
+using Castle.DynamicProxy;
 using pattern.strategy;
 using System;
 using System.Threading.Tasks;
@@ -23,6 +24,14 @@ namespace pattern.benchmark.Interceptor
         protected override async Task<TResult> HandleInterceptAsync<TResult>(IInvocation invocation, Func<Task<TResult>> result)
         {
             return await result.Invoke();
+        }
+    }
+
+    public class TestInterceptorAspectoreAttribute : AbstractInterceptorAttribute
+    {
+        public override async Task Invoke(AspectContext context, AspectDelegate next)
+        {
+            await next(context);
         }
     }
 }

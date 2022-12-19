@@ -11,7 +11,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  packageVersion: 2.4.0
+  packageVersion: 2.5.0
 
 stages:
   - stage: Build

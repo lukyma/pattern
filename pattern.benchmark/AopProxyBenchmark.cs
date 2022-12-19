@@ -1,11 +1,13 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿using AspectCore.Configuration;
+using AspectCore.Extensions.DependencyInjection;
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Engines;
+using BenchmarkDotNet.Jobs;
 using Castle.DynamicProxy;
 using Microsoft.Extensions.DependencyInjection;
 using pattern.benchmark.Interceptor;
 using pattern.benchmark.Strategy;
 using patterns.strategy;
-using PostSharp.Aspects;
-using PostSharp.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,7 +15,10 @@ namespace pattern.benchmark
 {
     [MemoryDiagnoser]
     [ThreadingDiagnoser]
-    [DryJob]
+    [SimpleJob(RuntimeMoniker.Net60, targetCount: 12)]
+    [SimpleJob(RuntimeMoniker.Net50, targetCount: 12)]
+    [SimpleJob(RuntimeMoniker.NetCoreApp31, targetCount: 12)]
+    [HtmlExporter]
     public class AopProxyBenchmark
     {
         [Benchmark]
@@ -71,27 +76,19 @@ namespace pattern.benchmark
             await strategy.HandleAsync(new Request(), CancellationToken.None);
         }
 
-        [Benchmark]
-        public async Task Test()
+        //[Benchmark]
+        public async Task WithAspectCoreDependencyInjector()
         {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddScoped<IStrategyAspectCore, TestStrategyAspectCore>();
 
-        }
+            serviceCollection.ConfigureDynamicProxy(config => config.Interceptors.AddTyped<TestInterceptorAspectoreAttribute>());
 
-        [PSerializable]
-        public class TestPostSharpAttribute : OnMethodBoundaryAspect
-        {
-            public override void OnEntry(MethodExecutionArgs args)
-            {
-                base.OnEntry(args);
-            }
-        }
-        public class Teste
-        {
-            [TestPostSharp]
-            public async Task Teste1()
-            {
+            var serviceProvider = serviceCollection.BuildDynamicProxyProvider();
 
-            }
+            var strategy = serviceProvider.GetService<IStrategyAspectCore>();
+
+            await strategy.HandleAsync(new Request(), CancellationToken.None);
         }
     }
 }

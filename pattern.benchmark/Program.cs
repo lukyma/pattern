@@ -1,4 +1,14 @@
-﻿using System;
+﻿using AspectCore.Configuration;
+using AspectCore.Extensions.DependencyInjection;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Environments;
+using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Running;
+using Microsoft.Extensions.DependencyInjection;
+using pattern.benchmark.Interceptor;
+using pattern.benchmark.Strategy;
+using System;
+using System.Threading;
 using System.Threading.Tasks;
 using static pattern.benchmark.AopProxyBenchmark;
 
@@ -8,18 +18,10 @@ namespace pattern.benchmark
     {
         static async Task Main(string[] args)
         {
-            Teste teste = new Teste();
-            await teste.Teste1();
-            //_ = BenchmarkRunner.Run<AopProxyBenchmark>();
-            //var serviceCollection = new ServiceCollection();
-            //serviceCollection.AddScoppedStrategy<IStrategy<Request, Response>, TestStrategy>(true);
-
-            //var serviceProvider = serviceCollection.BuildServiceProvider();
-
-            //var strategy = serviceProvider.GetService<IStrategy<Request, Response>>();
-
-            //var response = strategy.HandleAsync(new Request(), CancellationToken.None).Result;
-            Console.ReadLine();
+            var cfg = ManualConfig.CreateEmpty()
+                .AddJob(Job.Default.WithPlatform(Platform.X64));
+            _ = BenchmarkRunner.Run<AopProxyBenchmark>();
+            //Console.ReadLine();
         }
     }
 }
