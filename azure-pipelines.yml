@@ -12,6 +12,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
   packageVersion: 2.5.0
+  netCoreVersion: 6.x
 
 stages:
   - stage: Build
@@ -40,7 +41,8 @@ stages:
           displayName: "Dotnet Build"
         - script: | 
             dotnet test $(System.DefaultWorkingDirectory)/pattern.strategy/pattern.strategy.csproj \ 
-            --logger trx --results-directory ../TestResults/ --collect:"XPlat Code Coverage" --no-restore -m:1
+            --logger trx --results-directory ../TestResults/ --collect:"XPlat Code Coverage" --no-restore \ 
+            --framework $(netCoreVersion) -m:1
           displayName: 'Dotnet Test'
         - script: reportgenerator -reporttypes:"SonarQube" -reports:"../TestResults/**/*.cobertura.xml" -targetdir:"../TestResults/"
           displayName: 'Report Generator'
