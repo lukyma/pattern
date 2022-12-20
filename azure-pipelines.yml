@@ -39,10 +39,7 @@ stages:
             dotnet build $(System.DefaultWorkingDirectory)/pattern.strategy.test/pattern.strategy.test.csproj \
             --configuration $(buildConfiguration)
           displayName: "Dotnet Build"
-        - script: | 
-            dotnet test \
-            --framework $(netCoreVersion) --logger trx --results-directory ../TestResults/ \
-            --collect:"XPlat Code Coverage" --no-restore -m:1
+        - script: dotnet test ./pattern.strategy/pattern.strategy.csproj --logger trx --results-directory ../TestResults/ --collect:"XPlat Code Coverage" --no-restore -m:1
           displayName: 'Dotnet Test'
         - script: ls .
         - script: reportgenerator -reporttypes:"SonarQube" -reports:"../TestResults/**/*.cobertura.xml" -targetdir:"../TestResults/"
