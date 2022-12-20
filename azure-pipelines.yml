@@ -19,6 +19,10 @@ stages:
     jobs:
       - job: "BuildAndPublishSonar"
         steps:
+        - task: UseDotNet@2
+          inputs:
+            packageType: 'sdk'
+            version: '6.x'
         - script: |
             dotnet tool install --global dotnet-sonarscanner --version 5.7.1
             dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.1.9
@@ -50,6 +54,10 @@ stages:
     jobs:
       - job: 
         steps:
+          - task: UseDotNet@2
+            inputs:
+              packageType: 'sdk'
+              version: '6.x'
           - script: | 
               dotnet build $(System.DefaultWorkingDirectory)/pattern.strategy/pattern.strategy.csproj \
               --configuration $(buildConfiguration)
