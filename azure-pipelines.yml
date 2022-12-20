@@ -54,6 +54,10 @@ stages:
     jobs:
       - job: 
         steps:
+          - task: UseDotNet@2
+            inputs:
+              packageType: 'sdk'
+              version: '6.x'
           - script: | 
               dotnet build $(System.DefaultWorkingDirectory)/pattern.strategy/pattern.strategy.csproj \
               --configuration $(buildConfiguration)
