@@ -40,7 +40,7 @@ stages:
             --configuration $(buildConfiguration)
           displayName: "Dotnet Build"
         - script: | 
-            dotnet test $(System.DefaultWorkingDirectory)/pattern.strategy/pattern.strategy.csproj \
+            dotnet test \
             --framework $(netCoreVersion) --logger trx --results-directory ../TestResults/ \
             --collect:"XPlat Code Coverage" --no-restore -m:1
           displayName: 'Dotnet Test'
