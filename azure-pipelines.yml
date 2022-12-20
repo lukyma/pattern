@@ -41,7 +41,7 @@ stages:
           displayName: "Dotnet Build"
         - script: dotnet test --framework $(netCoreVersion) --logger trx --results-directory ../TestResults/ --collect:"XPlat Code Coverage" --no-restore -m:1
           displayName: 'Dotnet Test'
-        - script: ls ./pattern.strategy
+        - script: ls .
         - script: reportgenerator -reporttypes:"SonarQube" -reports:"../TestResults/**/*.cobertura.xml" -targetdir:"../TestResults/"
           displayName: 'Report Generator'
         - script: dotnet sonarscanner end
