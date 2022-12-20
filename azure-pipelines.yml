@@ -60,7 +60,10 @@ stages:
               version: '6.x'
           - script: | 
               dotnet build $(System.DefaultWorkingDirectory)/pattern.strategy/pattern.strategy.csproj \
-              --configuration $(buildConfiguration)
+              --configuration $(buildConfiguration) --framework net6.0
+          - script: | 
+              dotnet build $(System.DefaultWorkingDirectory)/pattern.strategy/pattern.strategy.csproj \
+              --configuration $(buildConfiguration) --framework netstandard2.1
             displayName: "Dotnet Build"
           - script: |
               dotnet pack $(System.DefaultWorkingDirectory)/pattern.strategy/pattern.strategy.csproj \
