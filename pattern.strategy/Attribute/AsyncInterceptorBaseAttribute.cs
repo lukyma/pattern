@@ -20,7 +20,11 @@ namespace pattern.strategy
             IInvocationProceedInfo proceedInfo,
             Func<IInvocation, IInvocationProceedInfo, Task> proceed)
         {
-            return HandleInterceptAsync(invocation, () => Task.FromResult(proceed(invocation, proceedInfo)));
+            return HandleInterceptAsync(invocation, async () => 
+            { 
+                await proceed(invocation, proceedInfo); 
+                return Task.CompletedTask; 
+            });
         }
 
         internal override Task<TResult> InterceptAsync<TResult>(

@@ -6,9 +6,10 @@ namespace pattern.strategy.test.Fakes.Interceptor
 {
     public class TestInterceptorAttribute : InterceptorAttribute
     {
-        protected override Task<TResult> HandleInterceptAsync<TResult>(IInvocation invocation, Func<Task<TResult>> result)
+        protected override async Task<TResult> HandleInterceptAsync<TResult>(IInvocation invocation, Func<Task<TResult>> result)
         {
-            return result();
+            var response = await result();
+            return response;
         }
     }
 

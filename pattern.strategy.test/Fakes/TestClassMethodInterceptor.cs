@@ -19,6 +19,7 @@ namespace pattern.strategy.test.Fakes
         [TestInterceptor]
         public virtual async Task AsyncInterceptorVoid()
         {
+            await Task.Delay(2000);
             await Task.CompletedTask;
         }
 

@@ -6,6 +6,7 @@ using pattern.strategy.test.Fakes.Interceptor;
 using patterns.strategy;
 using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Xunit;
 using static pattern.strategy.test.Fakes.RequestFake;
@@ -90,6 +91,22 @@ namespace pattern.strategy.test.Tests.Validation
             var proxy = serviceProvider.GetRequiredService<ITestClassMethodInterceptor>();
 
             Assert.Throws<NotImplementedException>(() => proxy.SyncInterceptorVoidException());
+        }
+
+        [Fact]
+        public async Task AsyncInterceptorVoid()
+        {
+            var serviceColletion = new ServiceCollection();
+
+            serviceColletion.AddScopedProxyInterceptor<ITestClassMethodInterceptor, TestClassMethodInterceptor>();
+
+            var serviceProvider = serviceColletion.BuildServiceProvider();
+
+            var proxy = serviceProvider.GetRequiredService<ITestClassMethodInterceptor>();
+
+            var task = proxy.AsyncInterceptorVoid();
+            await task;
+            Assert.True(task.IsCompleted);
         }
 
         [Fact]
