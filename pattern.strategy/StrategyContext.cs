@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,7 +23,7 @@ namespace patterns.strategy
         /// <returns></returns>
         public Task<TResponse> HandlerAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken)
         {
-            var service = ServiceProvider.GetService(typeof(IStrategy<TRequest, TResponse>)) as IStrategy<TRequest, TResponse>;
+            var service = ServiceProvider.GetRequiredService(typeof(IStrategy<TRequest, TResponse>)) as IStrategy<TRequest, TResponse>;
             return service.HandleAsync(request, cancellationToken);
         }
     }
