@@ -30,6 +30,19 @@ namespace pattern.strategy.test.Tests.StrategyContext
         }
 
         [Fact]
+        public async Task ValidateHandleFromStrategyContext_ExceptionRequiredService()
+        {
+            var serviceProviderMock = new Mock<IServiceProvider>();
+
+            serviceProviderMock.Setup(o => o.GetService(typeof(IStrategy<Request, Response>)))
+                .Returns(null);
+
+            var strategyContext = new patterns.strategy.StrategyContext(serviceProviderMock.Object);
+
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await strategyContext.HandlerAsync<Request, Response>(new Request(), CancellationToken.None));
+        }
+
+        [Fact]
         public async Task HandlerAsyncFromStrategyContextWithProxyInterceptor()
         {
             var serviceProviderMock = new Mock<IServiceProvider>();
