@@ -65,7 +65,7 @@ stages:
               version: '8.x'
           - script: | 
               dotnet build $(System.DefaultWorkingDirectory)/pattern.proxy/pattern.proxy.csproj \
-              --configuration $(buildConfiguration) --framework net6.0
+              --configuration $(buildConfiguration) --framework net8.0
           - script: | 
               dotnet build $(System.DefaultWorkingDirectory)/pattern.proxy/pattern.proxy.csproj \
               --configuration $(buildConfiguration) --framework netstandard2.1
