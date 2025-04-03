@@ -27,7 +27,7 @@ stages:
           inputs:
             versionSpec: '21'
             jdkArchitectureOption: x64
-            jdkSourceOption: AzureStorage
+            jdkSourceOption: PreInstalled
         - script: |
             dotnet tool install --global dotnet-sonarscanner --version 10.1.1
             dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.2.0
