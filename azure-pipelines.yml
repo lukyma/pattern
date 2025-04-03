@@ -12,7 +12,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
   packageVersion: 3.0.0
-  targetFramework: net6.0
+  targetFramework: net8.0
 
 stages:
   - stage: Build
@@ -22,13 +22,13 @@ stages:
         - task: UseDotNet@2
           inputs:
             packageType: 'sdk'
-            version: '6.x'
+            version: '8.x'
         - script: |
             dotnet tool install --global dotnet-sonarscanner --version 5.7.1
             dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.1.9
             dotnet sonarscanner begin \
-            /o:lucasmachado \
-            /k:9D915261-4352-490A-858E-0D73D6BAFBE4 \
+            /o:githublucasmachado \
+            /k:githublucasmachado_pattern \
             /d:sonar.coverageReportPaths=../TestResults/SonarQube.xml \
             /d:sonar.host.url=https://sonarcloud.io \
             /d:sonar.coverage.exclusions="**Test*.cs"
@@ -57,7 +57,7 @@ stages:
           - task: UseDotNet@2
             inputs:
               packageType: 'sdk'
-              version: '6.x'
+              version: '8.x'
           - script: | 
               dotnet build $(System.DefaultWorkingDirectory)/pattern.proxy/pattern.proxy.csproj \
               --configuration $(buildConfiguration) --framework net6.0
