@@ -1,5 +1,5 @@
 ﻿using Castle.DynamicProxy;
-using patterns.strategy;
+using pattern.proxy;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace pattern.strategy
+namespace pattern.proxy
 {
     /// <summary>
     /// Attribute to be used in your interceptors.

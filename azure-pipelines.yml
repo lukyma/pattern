@@ -11,8 +11,8 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  packageVersion: 2.5.2
-  targetFramework: net6.0
+  packageVersion: 3.0.0
+  targetFramework: net8.0
 
 stages:
   - stage: Build
@@ -22,21 +22,21 @@ stages:
         - task: UseDotNet@2
           inputs:
             packageType: 'sdk'
-            version: '6.x'
+            version: '8.x'
         - script: |
             dotnet tool install --global dotnet-sonarscanner --version 5.7.1
             dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.1.9
             dotnet sonarscanner begin \
-            /o:lucasmachado \
-            /k:9D915261-4352-490A-858E-0D73D6BAFBE4 \
+            /o:githublucasmachado \
+            /k:githublucasmachado_pattern \
             /d:sonar.coverageReportPaths=../TestResults/SonarQube.xml \
             /d:sonar.host.url=https://sonarcloud.io \
             /d:sonar.coverage.exclusions="**Test*.cs"
           displayName: "Sonar Begin"
         - script: | 
-            dotnet build $(System.DefaultWorkingDirectory)/pattern.strategy/pattern.strategy.csproj \
+            dotnet build $(System.DefaultWorkingDirectory)/pattern.proxy/pattern.proxy.csproj \
             --configuration $(buildConfiguration)
-            dotnet build $(System.DefaultWorkingDirectory)/pattern.strategy.test/pattern.strategy.test.csproj \
+            dotnet build $(System.DefaultWorkingDirectory)/pattern.proxy.test/pattern.proxy.test.csproj \
             --configuration $(buildConfiguration)
           displayName: "Dotnet Build"
         - script: dotnet test --logger trx --results-directory ../TestResults/ --collect:"XPlat Code Coverage" --no-restore --framework $(targetFramework) -m:1
@@ -57,16 +57,16 @@ stages:
           - task: UseDotNet@2
             inputs:
               packageType: 'sdk'
-              version: '6.x'
+              version: '8.x'
           - script: | 
-              dotnet build $(System.DefaultWorkingDirectory)/pattern.strategy/pattern.strategy.csproj \
+              dotnet build $(System.DefaultWorkingDirectory)/pattern.proxy/pattern.proxy.csproj \
               --configuration $(buildConfiguration) --framework net6.0
           - script: | 
-              dotnet build $(System.DefaultWorkingDirectory)/pattern.strategy/pattern.strategy.csproj \
+              dotnet build $(System.DefaultWorkingDirectory)/pattern.proxy/pattern.proxy.csproj \
               --configuration $(buildConfiguration) --framework netstandard2.1
             displayName: "Dotnet Build"
           - script: |
-              dotnet pack $(System.DefaultWorkingDirectory)/pattern.strategy/pattern.strategy.csproj \
+              dotnet pack $(System.DefaultWorkingDirectory)/pattern.proxy/pattern.proxy.csproj \
               -p:PackageVersion=$(packageVersion) \
               --output $(System.DefaultWorkingDirectory)/package \
               --configuration $(buildConfiguration)

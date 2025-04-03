@@ -1,12 +1,12 @@
-﻿using pattern.strategy.test.Fakes.Interceptor;
-using patterns.strategy;
+﻿using pattern.proxy.test.Fakes.Interceptor;
+using pattern.proxy;
 using System.Threading;
 using System.Threading.Tasks;
-using static pattern.strategy.test.Fakes.RequestFake;
+using static pattern.proxy.test.Fakes.RequestFake;
 
-namespace pattern.strategy.test.Fakes
+namespace pattern.proxy.test.Fakes
 {
-    public class RequestStrategyFake : IStrategy<Request, Response>
+    public class RequestStrategyFake : IProxy<Request, Response>
     {
         [TestInterceptor]
         public async Task<Response> HandleAsync(Request request, CancellationToken cancellationToken)

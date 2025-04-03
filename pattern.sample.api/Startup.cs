@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 using pattern.sample.api.Service;
 using pattern.sample.api.StrategyHandler;
 using pattern.sample.api.StrategyHandler.Validator;
-using patterns.strategy;
+using pattern.proxy;
 
 namespace pattern.sample.api
 {
@@ -29,7 +29,7 @@ namespace pattern.sample.api
             //services.AddProxyInterceptor<ITestService, TestService>(ServiceLifetime.Scoped);
 
             services.AddScopedProxyInterceptor<ITestService, TestService>();
-            services.AddScoppedStrategy<IStrategy<TestStrategyRequest, TestStrategyResponse>, TestStrategy>(true);
+            services.AddScoppedProxy<IProxy<TestStrategyRequest, TestStrategyResponse>, TestStrategy>(true);
             //services.AddScoppedStrategy<IStrategy<TestStrategyRequest2, TestStrategyResponse2>, TestStrategy2>();
         }
 

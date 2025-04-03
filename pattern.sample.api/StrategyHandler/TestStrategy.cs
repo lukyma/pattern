@@ -1,12 +1,12 @@
 ﻿using pattern.sample.api.Interceptor;
 using pattern.sample.api.Service;
-using patterns.strategy;
+using pattern.proxy;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace pattern.sample.api.StrategyHandler
 {
-    public class TestStrategy : IStrategy<TestStrategyRequest, TestStrategyResponse>
+    public class TestStrategy : IProxy<TestStrategyRequest, TestStrategyResponse>
     {
         private ITestService TestService { get; }
         public TestStrategy(ITestService testService)
@@ -25,7 +25,7 @@ namespace pattern.sample.api.StrategyHandler
             return new TestStrategyResponse();
         }
     }
-    public class TestStrategy2 : IStrategy<TestStrategyRequest2, TestStrategyResponse2>
+    public class TestStrategy2 : IProxy<TestStrategyRequest2, TestStrategyResponse2>
     {
         [TestInterceptor(Order = 1)]
         public async Task<TestStrategyResponse2> HandleAsync(TestStrategyRequest2 request, CancellationToken cancellationToken)

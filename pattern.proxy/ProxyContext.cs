@@ -3,12 +3,12 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace patterns.strategy
+namespace pattern.proxy
 {
-    public class StrategyContext : IStrategyContext
+    public class ProxyContext : IProxyContext
     {
         private IServiceProvider ServiceProvider { get; }
-        public StrategyContext(IServiceProvider serviceProvider)
+        public ProxyContext(IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
         }
@@ -23,7 +23,7 @@ namespace patterns.strategy
         /// <returns></returns>
         public Task<TResponse> HandlerAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken)
         {
-            var service = ServiceProvider.GetRequiredService(typeof(IStrategy<TRequest, TResponse>)) as IStrategy<TRequest, TResponse>;
+            var service = ServiceProvider.GetRequiredService(typeof(IProxy<TRequest, TResponse>)) as IProxy<TRequest, TResponse>;
             return service.HandleAsync(request, cancellationToken);
         }
     }

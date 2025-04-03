@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace pattern.strategy.test.Fakes.Interceptor
+namespace pattern.proxy.test.Fakes.Interceptor
 {
     public class TestInterceptorAttribute : InterceptorAttribute
     {

@@ -2,7 +2,7 @@
 using FluentValidation;
 using pattern.sample.api.Service;
 using pattern.sample.api.StrategyHandler.Validator;
-using pattern.strategy;
+using pattern.proxy;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

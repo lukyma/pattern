@@ -1,14 +1,14 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace patterns.strategy
+namespace pattern.proxy
 {
-    public interface IStrategy<TRequest, TResponse> : IStrategy
+    public interface IProxy<TRequest, TResponse> : IProxy
     {
         Task<TResponse> HandleAsync(TRequest request, CancellationToken cancellationToken);
     }
 
-    public interface IStrategy
+    public interface IProxy
     {
     }
 }
