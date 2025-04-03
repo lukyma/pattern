@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using pattern.sample.api.StrategyHandler;
-using patterns.strategy;
+using pattern.proxy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +13,13 @@ namespace pattern.sample.api.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private IStrategyContext StrategyContext { get; }
+        private IProxyContext StrategyContext { get; }
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        public WeatherForecastController(IStrategyContext strategyContext)
+        public WeatherForecastController(IProxyContext strategyContext)
         {
             StrategyContext = strategyContext;
         }

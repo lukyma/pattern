@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace pattern.strategy.test.Fakes
+namespace pattern.proxy.test.Fakes
 {
     public class RequestFake
     {

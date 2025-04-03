@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace patterns.strategy
+namespace pattern.proxy
 {
-    public interface IStrategyContext
+    public interface IProxyContext
     {
         Task<TResponse> HandlerAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken);
     }

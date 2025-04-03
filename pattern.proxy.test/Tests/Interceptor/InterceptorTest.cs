@@ -1,17 +1,17 @@
 ﻿using Castle.DynamicProxy;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using pattern.strategy.test.Fakes;
-using pattern.strategy.test.Fakes.Interceptor;
-using patterns.strategy;
+using pattern.proxy.test.Fakes;
+using pattern.proxy.test.Fakes.Interceptor;
+using pattern.proxy;
 using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Xunit;
-using static pattern.strategy.test.Fakes.RequestFake;
+using static pattern.proxy.test.Fakes.RequestFake;
 
-namespace pattern.strategy.test.Tests.Validation
+namespace pattern.proxy.test.Tests.Validation
 {
     public class InterceptorTest
     {

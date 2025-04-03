@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 
-namespace patterns.strategy
+namespace pattern.proxy
 {
     [ExcludeFromCodeCoverage]
     internal static class RethrowHelper

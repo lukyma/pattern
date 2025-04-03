@@ -1,59 +1,59 @@
 ﻿using Castle.DynamicProxy;
 using Microsoft.Extensions.DependencyInjection;
-using pattern.strategy;
+using pattern.proxy;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace patterns.strategy
+namespace pattern.proxy
 {
     [ExcludeFromCodeCoverage]
     public static class ServiceExtensions
     {
         /// <summary>
-        /// Add transient strategy
+        /// Add transient Proxy
         /// </summary>
-        /// <typeparam name="TInterface">Interface the type IStrategy<,> </typeparam>
-        /// <typeparam name="TImplementation">Implementation of IStrategy<,> </typeparam>
+        /// <typeparam name="TInterface">Interface the type IProxy<,> </typeparam>
+        /// <typeparam name="TImplementation">Implementation of IProxy<,> </typeparam>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddTransientStrategy<TInterface, TImplementation>(this IServiceCollection services, bool withInterceptor = false)
-            where TInterface : IStrategy
-            where TImplementation : class, IStrategy
+        public static IServiceCollection AddTransientProxy<TInterface, TImplementation>(this IServiceCollection services, bool withInterceptor = false)
+            where TInterface : IProxy
+            where TImplementation : class, IProxy
 
         {
-            return AddStrategy<TInterface, TImplementation>(services, ServiceLifetime.Transient, withInterceptor);
+            return AddProxy<TInterface, TImplementation>(services, ServiceLifetime.Transient, withInterceptor);
         }
 
         /// <summary>
-        /// Add singleton strategy
+        /// Add singleton Proxy
         /// </summary>
-        /// <typeparam name="TInterface">Interface the type IStrategy<,> </typeparam>
-        /// <typeparam name="TImplementation">Implementation of IStrategy<,> </typeparam>
+        /// <typeparam name="TInterface">Interface the type IProxy<,> </typeparam>
+        /// <typeparam name="TImplementation">Implementation of IProxy<,> </typeparam>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddSingletonStrategy<TInterface, TImplementation>(this IServiceCollection services, bool withInterceptor = false)
-            where TInterface : IStrategy
-            where TImplementation : class, IStrategy
+        public static IServiceCollection AddSingletonProxy<TInterface, TImplementation>(this IServiceCollection services, bool withInterceptor = false)
+            where TInterface : IProxy
+            where TImplementation : class, IProxy
 
         {
-            return AddStrategy<TInterface, TImplementation>(services, ServiceLifetime.Singleton, withInterceptor);
+            return AddProxy<TInterface, TImplementation>(services, ServiceLifetime.Singleton, withInterceptor);
         }
 
         /// <summary>
-        /// Add scoped strategy
+        /// Add scoped Proxy
         /// </summary>
-        /// <typeparam name="TInterface">Interface the type IStrategy<,> </typeparam>
-        /// <typeparam name="TImplementation">Implementation of IStrategy<,> </typeparam>
+        /// <typeparam name="TInterface">Interface the type IProxy<,> </typeparam>
+        /// <typeparam name="TImplementation">Implementation of IProxy<,> </typeparam>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddScoppedStrategy<TInterface, TImplementation>(this IServiceCollection services, bool withInterceptor = false)
-            where TInterface : IStrategy
-            where TImplementation : class, IStrategy
+        public static IServiceCollection AddScoppedProxy<TInterface, TImplementation>(this IServiceCollection services, bool withInterceptor = false)
+            where TInterface : IProxy
+            where TImplementation : class, IProxy
 
         {
-            return AddStrategy<TInterface, TImplementation>(services, ServiceLifetime.Scoped, withInterceptor);
+            return AddProxy<TInterface, TImplementation>(services, ServiceLifetime.Scoped, withInterceptor);
         }
 
         /// <summary>
@@ -178,13 +178,13 @@ namespace patterns.strategy
 
             return services;
         }
-        public static IServiceCollection AddStrategy<TInterface, TImplementation>(this IServiceCollection services, ServiceLifetime lifetime, bool withInterceptor)
-            where TInterface : IStrategy
-            where TImplementation : class, IStrategy
+        public static IServiceCollection AddProxy<TInterface, TImplementation>(this IServiceCollection services, ServiceLifetime lifetime, bool withInterceptor)
+            where TInterface : IProxy
+            where TImplementation : class, IProxy
         {
             var typeInterface = typeof(TInterface);
-            var serviceTypeStrategyContext = typeof(IStrategyContext);
-            var implementationTypeStrategyContext = typeof(StrategyContext);
+            var serviceTypeProxyContext = typeof(IProxyContext);
+            var implementationTypeProxyContext = typeof(ProxyContext);
 
             if (withInterceptor)
             {
@@ -198,16 +198,16 @@ namespace patterns.strategy
                 }, lifetime));
             }
 
-            var servicesStrategy = services
+            var servicesProxy = services
             .Where(s => s.ServiceType == typeInterface)
             .ToList();
 
-            if (servicesStrategy.Count == 0)
+            if (servicesProxy.Count == 0)
             {
                 throw new InvalidOperationException($"Não foi encontrado {typeInterface} " +
                                                      "no ServiceCollection.");
             }
-            services.Add(ServiceDescriptor.Describe(serviceTypeStrategyContext, implementationTypeStrategyContext, lifetime));
+            services.Add(ServiceDescriptor.Describe(serviceTypeProxyContext, implementationTypeProxyContext, lifetime));
 
             return services;
         }

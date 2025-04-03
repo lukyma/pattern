@@ -1,5 +1,5 @@
 ﻿using pattern.benchmark.Interceptor;
-using patterns.strategy;
+using pattern.proxy;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,7 +10,7 @@ namespace pattern.benchmark.Strategy
         public string Name { get; set; }
     }
 
-    public class TestStrategy : IStrategy<Request, Response>
+    public class TestStrategy : IProxy<Request, Response>
     {
         [TestInterceptor]
         public async Task<Response> HandleAsync(Request request, CancellationToken cancellationToken)
@@ -19,7 +19,7 @@ namespace pattern.benchmark.Strategy
         }
     }
 
-    public interface IStrategyAspectCore : IStrategy<Request, Response>
+    public interface IStrategyAspectCore : IProxy<Request, Response>
     {
         [TestInterceptorAspectore]
         Task<Response> HandleAsync(Request request, CancellationToken cancellationToken);

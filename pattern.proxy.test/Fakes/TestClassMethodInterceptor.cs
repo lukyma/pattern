@@ -1,7 +1,7 @@
-﻿using pattern.strategy.test.Fakes.Interceptor;
+﻿using pattern.proxy.test.Fakes.Interceptor;
 using System.Threading.Tasks;
 
-namespace pattern.strategy.test.Fakes
+namespace pattern.proxy.test.Fakes
 {
     public interface ITestClassMethodInterceptor
     {

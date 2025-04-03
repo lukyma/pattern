@@ -7,7 +7,7 @@ using Castle.DynamicProxy;
 using Microsoft.Extensions.DependencyInjection;
 using pattern.benchmark.Interceptor;
 using pattern.benchmark.Strategy;
-using patterns.strategy;
+using pattern.proxy;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -34,7 +34,7 @@ namespace pattern.benchmark
             var proxyGenerator = new ProxyGenerator();
             var interceptor = new TestInterceptor();
             var strategy = new TestStrategy();
-            proxyGenerator.CreateInterfaceProxyWithTarget<IStrategy<Request, Response>>(strategy, interceptor);
+            proxyGenerator.CreateInterfaceProxyWithTarget<IProxy<Request, Response>>(strategy, interceptor);
 
             await strategy.HandleAsync(new Request(), CancellationToken.None);
         }
@@ -45,7 +45,7 @@ namespace pattern.benchmark
             var proxyGenerator = new ProxyGenerator();
             var interceptor = new TestInterceptorAttribute();
             var strategy = new TestStrategy();
-            proxyGenerator.CreateInterfaceProxyWithTarget<IStrategy<Request, Response>>(strategy, interceptor);
+            proxyGenerator.CreateInterfaceProxyWithTarget<IProxy<Request, Response>>(strategy, interceptor);
 
             await strategy.HandleAsync(new Request(), CancellationToken.None);
         }
@@ -54,11 +54,11 @@ namespace pattern.benchmark
         public async Task WithoutProxyGeneratorDependencyInjector()
         {
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddScoppedStrategy<IStrategy<Request, Response>, TestStrategy>(false);
+            serviceCollection.AddScoppedProxy<IProxy<Request, Response>, TestStrategy>(false);
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var strategy = serviceProvider.GetService<IStrategy<Request, Response>>();
+            var strategy = serviceProvider.GetService<IProxy<Request, Response>>();
 
             await strategy.HandleAsync(new Request(), CancellationToken.None);
         }
@@ -67,11 +67,11 @@ namespace pattern.benchmark
         public async Task WithProxyGeneratorDependencyInjector()
         {
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddScoppedStrategy<IStrategy<Request, Response>, TestStrategy>(true);
+            serviceCollection.AddScoppedProxy<IProxy<Request, Response>, TestStrategy>(true);
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var strategy = serviceProvider.GetService<IStrategy<Request, Response>>();
+            var strategy = serviceProvider.GetService<IProxy<Request, Response>>();
 
             await strategy.HandleAsync(new Request(), CancellationToken.None);
         }

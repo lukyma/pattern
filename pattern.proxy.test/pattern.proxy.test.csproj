@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\pattern.strategy\pattern.strategy.csproj" />
+    <ProjectReference Include="..\pattern.proxy\pattern.proxy.csproj" />
   </ItemGroup>
 
 </Project>

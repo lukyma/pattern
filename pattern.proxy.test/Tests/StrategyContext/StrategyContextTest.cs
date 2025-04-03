@@ -1,16 +1,16 @@
 ﻿using Castle.DynamicProxy;
 using Moq;
-using pattern.strategy.test.Fakes;
-using pattern.strategy.test.Fakes.Interceptor;
-using patterns.strategy;
+using pattern.proxy.test.Fakes;
+using pattern.proxy.test.Fakes.Interceptor;
+using pattern.proxy;
 using System;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
-using static pattern.strategy.test.Fakes.RequestFake;
+using static pattern.proxy.test.Fakes.RequestFake;
 
-namespace pattern.strategy.test.Tests.StrategyContext
+namespace pattern.proxy.test.Tests.StrategyContext
 {
     public class StrategyContextTest
     {
@@ -19,10 +19,10 @@ namespace pattern.strategy.test.Tests.StrategyContext
         {
             var serviceProviderMock = new Mock<IServiceProvider>();
 
-            serviceProviderMock.Setup(o => o.GetService(typeof(IStrategy<Request, Response>)))
+            serviceProviderMock.Setup(o => o.GetService(typeof(IProxy<Request, Response>)))
                 .Returns(new RequestStrategyFake());
 
-            var strategyContext = new patterns.strategy.StrategyContext(serviceProviderMock.Object);
+            var strategyContext = new pattern.proxy.ProxyContext(serviceProviderMock.Object);
 
             var response = await strategyContext.HandlerAsync<Request, Response>(new Request(), CancellationToken.None);
 
@@ -34,10 +34,10 @@ namespace pattern.strategy.test.Tests.StrategyContext
         {
             var serviceProviderMock = new Mock<IServiceProvider>();
 
-            serviceProviderMock.Setup(o => o.GetService(typeof(IStrategy<Request, Response>)))
+            serviceProviderMock.Setup(o => o.GetService(typeof(IProxy<Request, Response>)))
                 .Returns(null);
 
-            var strategyContext = new patterns.strategy.StrategyContext(serviceProviderMock.Object);
+            var strategyContext = new pattern.proxy.ProxyContext(serviceProviderMock.Object);
 
             await Assert.ThrowsAsync<InvalidOperationException>(async () => await strategyContext.HandlerAsync<Request, Response>(new Request(), CancellationToken.None));
         }
@@ -52,11 +52,11 @@ namespace pattern.strategy.test.Tests.StrategyContext
 
             var validatorInterceptor = new TestInterceptorAttribute();
 
-            var proxy = proxyGenerator.CreateInterfaceProxyWithTarget(typeof(IStrategy<Request, Response>),
+            var proxy = proxyGenerator.CreateInterfaceProxyWithTarget(typeof(IProxy<Request, Response>),
                                                                       strategyFake,
                                                                       validatorInterceptor);
 
-            serviceProviderMock.Setup(o => o.GetService(typeof(IStrategy<Request, Response>)))
+            serviceProviderMock.Setup(o => o.GetService(typeof(IProxy<Request, Response>)))
                 .Returns(proxy);
 
             validatorInterceptor
@@ -64,7 +64,7 @@ namespace pattern.strategy.test.Tests.StrategyContext
                 .GetProperty("ServiceProvider", BindingFlags.NonPublic | BindingFlags.Instance)
                 .SetValue(validatorInterceptor, serviceProviderMock.Object);
 
-            var strategyContext = new patterns.strategy.StrategyContext(serviceProviderMock.Object);
+            var strategyContext = new pattern.proxy.ProxyContext(serviceProviderMock.Object);
 
             var response = await strategyContext.HandlerAsync<Request, Response>(new Request(), CancellationToken.None);
 

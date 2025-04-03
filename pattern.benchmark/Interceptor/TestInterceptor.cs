@@ -1,6 +1,6 @@
 ﻿using AspectCore.DynamicProxy;
 using Castle.DynamicProxy;
-using pattern.strategy;
+using pattern.proxy;
 using System;
 using System.Threading.Tasks;
 
